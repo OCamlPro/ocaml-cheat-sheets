@@ -1,0 +1,293 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{The OCaml Language}}
+\hfill
+\hfill
+\scriptsize
+OCaml v. 3.12.0 ---
+\today{} ---
+OCamlPro SAS
+({\bf http://www.ocamlpro.com/})
+\\
+\hrule~\\
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+\subsection{Syntax}
+
+Implementations are in \verb!.ml! files, interfaces are in \verb!.mli!
+files.\\
+ Comments can be nested, between delimiters \verb!(*!...\verb!*)!\\
+Integers: \verb!123!, \verb!1_000!, \verb!0x4533!, \verb!0o773!, \verb!0b1010101!\\
+Chars: \verb!'a'!, \verb!'\255'!, \verb!'\xFF'!, \verb!'\n'!
+\hfill
+Floats: \verb!0.1!, \verb!-1.234e-34!\\
+\subsection{Data Types}
+
+\begin{tabular}{ll}
+\verb!unit! & Void, takes only one value: \verb!()!\\
+\verb!int! & Integer of either 31 or 63 bits, like \verb!32! \\
+\verb!int32! & 32 bits Integer, like \verb!32l! \\
+\verb!int64! & 64 bits Integer, like \verb!32L! \\
+\verb!float! & Double precision float, like \verb!1.0! \\
+\verb!bool! & Boolean, takes two values: \verb!true! or \verb!false!\\
+\verb!char! & Simple ASCII characters, like 'A'\\
+\verb!string! & Strings of chars, like \verb!"Hello"!\\
+\verb!'a list! & Lists, like \verb!head :: tail! or \verb![1;2;3]!   \\
+\verb!'a array! & Arrays, like \verb![|1;2;3|]! \\
+$t_1$ \verb!*! ... \verb!*! $t_n$& Tuples, like \verb!(1,"foo", 'b')!
+\end{tabular}
+
+\subsection{Constructed Types}
+
+\begin{tabular}{ll}
+\verb!type record =! & new record type \\
+~~~ \verb!{!~~~~~~~~~~~~ \emph{field1} \verb!: bool;! & immutable field \\
+~~~ \verb!  mutable! \emph{field2} \verb!: int; }! & mutable field \\
+\end{tabular}
+\begin{tabular}{ll}
+\verb!type enum =! & new variant type \\
+~~~ \verb!| Constant! & Constant constructor \\
+~~~ \verb!| Param of string! & Constructor with arg \\
+~~~ \verb!| Pair of string * int! & Constructor with args \\
+\end{tabular}
+
+\subsection{Constructed Values}
+
+\begin{tabular}{ll}
+\verb!let r = { field1 = true; field2 = 3; }! \\
+\verb!let r' = { r with field1 = false }!\\
+\verb!r.field2 <- r.field2 + 1;!\\
+\verb!let c = Constant!\\
+\verb!let c' = Param "foo"!\\
+\verb!let c'' = Pair ("bar",3)!\\
+\end{tabular}
+
+\subsection{References, Strings and Arrays}
+
+\begin{tabular}{ll}
+\verb!let x = ref 3! & integer reference (mutable) \\
+\verb!x := 4! & reference assignation \\
+\verb&print_int !x;& & reference access \\
+\verb!s.[0]! & string char access \\
+\verb!s.[0] <- 'a'! & string char modification \\
+\verb!t.(0)! & array element access \\
+\verb!t.(0) <- x! & array element modification \\
+\end{tabular}
+
+\subsection{Imports --- Namespaces}
+
+\begin{tabular}{ll}
+\verb!open Unix;;! & global open \\
+\verb!let open Unix in! \emph{expr} & local open \\
+\verb!Unix.(!\emph{expr}\verb!)! & local open \\
+\end{tabular}
+
+\vbox{
+\subsection{Functions}
+
+\begin{tabular}{ll}
+\verb!let f x =! \emph{expr} & function with one arg \\
+\verb!let rec f x =! \emph{expr} & recursive function \\
+\hfill apply:& \verb!f x! \\
+\verb!let f x y =! \emph{expr} & with two args \\
+\hfill apply:& \verb!f x y! \\
+\verb!let f (x,y) =! \emph{expr} & with a pair as arg\\
+\hfill apply: & \verb!f (x,y)! \\
+\verb!List.iter (fun x ->! \emph{e}\verb!) l! & anonymous function\\
+\verb!let f= function None ->! \emph{act}& function definition\\
+\verb!            | Some x ->! \emph{act}& \hfill by cases \\
+\hfill apply: & \verb!f (Some x)! \\
+\verb!let f ~str ~len =! \emph{expr} & with labeled args \\
+\hfill apply: & \verb!f ~str:s ~len:10! \\
+\hfill apply (for \verb!~str:str!): & \verb!f ~str ~len! \\
+\verb!let f ?len ~str =! \emph{expr} & with optional arg (\verb!option!) \\
+\verb!let f ?(len=0) ~str =! \emph{expr} & optional arg default \\
+\hfill apply (with omitted arg): & \verb!f ~str:s ! \\
+\hfill apply (with commuting): & \verb!f ~str:s ~len:12! \\
+\hfill apply (\verb!len: int option!): & \verb!f ?len ~str:s! \\
+\hfill apply (explicitely ommited): & \verb!f ?len:None ~str:s! \\
+\verb!let f (x : int) =! \emph{expr} & arg has constrainted type \\
+\verb!let f : 'a 'b. 'a*'b -> 'a!& function with constrainted\\
+\verb!      = fun (x,y) -> x! & \hfill polymorphic type\\
+\end{tabular}
+
+
+\subsection{Modules}
+
+\begin{tabular}{ll}
+\verb!module M = struct! .. \verb!end! & module definition\\
+\verb!module M: sig! .. \verb!end= struct! .. \verb!end! & module and signature\\
+\verb!module M = Unix! & module renaming \\
+\verb!include M! & include items from \\
+\verb!module type Sg = sig! .. \verb!end! & signature definition\\
+\verb!module type Sg = module type of M! & signature of module\\
+\verb!let module M = struct! .. \verb!end in! ..  & local module \\
+\verb!let m = (module M : Sg)! & to $1^{st}$-class module\\
+\verb!module M = (val m : Sg)! & from $1^{st}$-class module\\
+\verb!module Make(S: Sg) = struct! .. \verb!end! & functor \\
+\verb!module M = Make(M')! & functor application \\
+\end{tabular}
+
+Module type items:\\
+\verb!val!, \verb!external!, \verb!type!, \verb!exception!, \verb!module!, \verb!open!, \verb!include!, \verb!class!
+
+\subsection{Pattern-matching}
+
+\begin{tabular}{ll}
+\verb!match! \emph{expr} \verb!with! \\
+\verb!  |! \emph{pattern} \verb!->! \emph{action}\\
+\verb!  |! \emph{pattern} \verb!when! \emph{guard} \verb!->! \emph{action}
+& conditional case \\
+\verb!  | _ ->! \emph{action} & default case\\
+\end{tabular}
+Patterns:\\
+\begin{tabular}{ll}
+\verb!| Pair (x,y) ->! & variant pattern \\
+\verb!| { field = 3; _ } ->! & record pattern \\
+\verb!| head :: tail ->! & list pattern \\
+\verb!| [1;2;x] ->! & list-pattern \\
+\verb!| (Some x) as y ->! & with extra binding \\
+\verb!| (1,x) | (x,0) ->! & or-pattern \\
+\end{tabular}
+}
+
+\vbox{
+\subsection{Conditionals}
+
+\begin{tabular}{|c|c|l|}\hline
+Structural  & Physical & \\
+\verb!=!  & \verb!==! & Polymorphic Equality \\
+\verb!<>! & \verb&!=& & Polymorphic Inequality \\
+\end{tabular}
+
+Polymorphic Generic Comparison Function: \verb!compare!
+\begin{tabular}{|l|c|c|c|}\hline
+                          & x $<$ y & x = y & x $>$ y \\
+\verb!compare x y! &  -1    &   0   &   1 \\
+\end{tabular}
+
+Other Polymorphic Comparisons : \verb!>!, \verb!>=!, \verb!<!, \verb!<=!
+}
+
+\subsection{Loops}
+
+\begin{verbatim}
+while cond do ... done;
+for var = min_value to max_value do ... done;
+for var = max_value downto min_value do ... done;
+\end{verbatim}
+
+\subsection{Exceptions}
+
+\begin{tabular}{p{3.5cm}cp{3.5cm}}
+\verb!exception MyExn! && new exception \\
+\verb!exception MyExn of t * t'!&& same with arguments\\
+\verb!exception MyFail = Failure! && rename exception with args\\
+\verb!raise MyExn! && raise an exception\\
+\verb!raise (MyExn (!\emph{args}\verb!))! && raise with args\\
+\verb!try!~\emph{expression} \verb!with Myn -> ...! & & catch \verb!MyException! if raised in \emph{expression} \\
+\end{tabular}
+
+\subsection{Objects and Classes}
+
+\begin{tabular}{ll}
+\verb!class virtual foo x = !& virtual class with arg \\
+\verb! let y = x+2 in! & init before object creation\\
+\verb! object (self: 'a)! & object with self reference\\
+\verb!  val mutable variable = x! & mutable instance variable \\
+\verb!  method get = variable! & accessor \\
+\verb!  method set z =!\\
+\verb!     variable <- z+y! & mutator\\
+\verb!  method virtual copy : 'a! & virtual method\\
+\verb!  initializer! & init after object creation\\
+\verb!   self#set (self#get+1)!& \\
+\verb! end! &  \\
+\verb!class bar = !&  non-virtual class\\
+\verb! let var = 42 in! & class variable\\
+\verb! fun z -> object! & constructor argument \\
+\verb& inherit foo z as super& & inheritance and ancestor reference\\
+\verb& method&{\bf \verb&!&}\verb! set y = ! & method explicitely overriden\\
+\verb!    super#set (y+4)! & access to ancestor \\
+\verb! method copy = {< x = 5 >}! & copy with change \\
+\verb!end! & \\
+\verb!let obj = new bar 3! & new object \\
+\verb!obj#set 4; obj#get!  & method invocation \\
+\verb!let obj = object! .. \verb!end! & immediate object \
+\end{tabular}
+
+\subsection{Polymorphic variants}
+
+
+\begin{tabular}{ll}
+\verb!type t = [ `A | `B of int ]! & closed variant \\
+\verb!type u = [ `A | `C of float ]! & \\
+\verb!type v = [ t | u | ]! & union of variants \\
+\verb!let f : [< t ] -> int = function! & argument must be\\
+\verb!  | `A -> 0 | `B n -> n! & \hfill a subtype of \verb!t!\\
+\verb!let f : [> t ] -> int = function! & \verb!t! is a subtype \\
+\verb!  | `A -> 0 | `B n -> n | _ -> 1! & \hfill of the argument \\
+\end{tabular}
+
+\end{multicols}
+
+
+\end{document}
+
+\subsection{Misc}
+

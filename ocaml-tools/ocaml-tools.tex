@@ -1,0 +1,373 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{OCaml Standard Tools}}
+\hfill
+\hfill
+\scriptsize
+OCaml v. 3.12.0 ---
+\today{} ---
+Copyright \copyright\ 2011 OCamlPro SAS
+---
+{\bf http://www.ocamlpro.com/}\\
+\hrule~\\
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Standard Tools}
+
+\verb!.opt! tools are the same tools, compiled in native-code, thus
+much faster.
+
+\noindent\begin{tabular}{p{20mm}p{50mm}}
+\verb!ocamlopt![\verb!.opt!]  & native-code compiler \\
+\verb!ocamlc![\verb!.opt!]     & bytecode compiler \\
+\verb!ocaml!                      & interactive bytecode toplevel  \\
+\verb!ocamllex![\verb!.opt!]  & lexer compiler \\
+\verb!ocamlyacc!                & parser compiler \\
+\verb!ocamldep![\verb!.opt!]   & dependency analyser \\
+\verb!ocamldoc!                  & documentation generator \\
+\verb!ocamlrun!                  & bytecode interpreter \\
+\end{tabular}
+
+\section{Compiling}
+
+A unit interface must be compiled before its implementation.  Here,
+\verb!ocamlopt! can replace \verb!ocamlc! anywhere to target asm.
+
+~\hspace{-1em}\noindent
+\begin{tabular}{ll}
+\verb!ocamlc -c test.mli! & compile an interface \\
+\verb!ocamlc -c test.ml! & compile an implementation \\
+\verb!ocamlc -a -o lib.cma test.cmo! & generate a library \\
+\verb!ocamlc -o prog test.cmo! & generate an executable \\
+\multicolumn{2}{l}{
+{\tt ocamlopt -shared -o p.cmxs test.cmx}
+\hfill generate a plugin}\\
+\end{tabular}
+
+\subsection{Generic Arguments}
+
+\noindent\begin{tabular}{p{25mm}p{50mm}}
+\verb!-config! & print config and exit\\
+\verb!-c! & do not link \\
+\verb!-o!~\emph{target} & specify the target to generate\\
+\verb!-a! & build a library  \\
+\verb!-pp!~\emph{prepro} & use a preprocessor (often \verb!camlp4!) \\
+\verb!-I!~\emph{directory}     & search directory for dependencies \\
+\verb!-g!     & add debugging info \\
+\verb!-annot!     & generate source navigation information \\
+\verb!-i!     & print inferred interface \\
+\verb!-thread! & generate thread-aware code\\
+\verb!-linkall!     & link even unused units \\
+\verb!-nostdlib! & do not use installation directory \\
+\verb!-nopervasives! & do not autoload \verb!Pervasives! \\
+\end{tabular}
+
+\subsection{Linking with C}
+
+\noindent\begin{tabular}{p{25mm}p{50mm}}
+\verb!-cc!~\emph{gcc} & use as C compiler/linker\\
+\verb!-cclib!~\emph{option} & pass option to the C linker\\
+\verb!-ccopt!~\emph{option} & pass option to C compiler/linker \\
+\verb!-output-obj! & link, but output a C object file \\
+\verb!-noautolink! & do not automatically link C libraries\\
+\end{tabular}
+
+\subsection{Errors and Warnings}
+
+Warnings default is \verb!+a-4-6-7-9-27..29!
+\noindent\begin{tabular}{p{25mm}p{50mm}}
+\verb!-w!~\emph{wlist} & set or unset warnings\\
+\verb!-warn-errors!~\emph{wlist} & set or unset warnings as errors\\
+\verb!-warn-help! & print description of warnings\\
+\verb!-rectypes! & allow arbitrarily recursive types \\
+\end{tabular}
+
+\subsection{Native-code Specific Arguments}
+
+\noindent\begin{tabular}{p{20mm}p{50mm}}
+\verb!-p!                & compile or link for profiling with \verb!gprof! \\
+\verb!-inline!~\emph{size} & set maximal function size for inlining \\
+\verb!-unsafe!   & remove array bound checks \\
+\end{tabular}
+
+\subsection{Bytecode Specific Arguments}
+
+\noindent\begin{tabular}{p{30mm}p{50mm}}
+\verb!-custom!          & link with runtime and C libraries \\
+\verb!-make-runtime! & generate a pre-customized runtime \\
+\verb!-use-runtime!~\emph{runtime}  & use \emph{runtime} instead of \verb!ocamlrun! \\
+\end{tabular}
+
+\subsection{Packing Arguments}
+
+\noindent\begin{tabular}{p{30mm}p{45mm}}
+\verb!-pack -o!~\emph{file.cmo/.cmx}  & pack several units in one unit \\
+\verb!-c -for-pack!~\emph{File} & compile unit to be packed into \emph{File} \\
+\end{tabular}
+
+\section{Interactive Toplevel}
+Use \verb!;;! to terminate and execute what you typed.\\
+Building your own: \verb!ocamlmktop -o unixtop unix.cma!\\
+\begin{tabular}{ll}
+\verb!#load "lib.cma";;! & load a compiled library/unit \\
+\verb!#use "file.ml";;! & compile and run a source file\\
+\verb!#directory "dir";;! & add directory to search path\\
+\verb!#trace!~\emph{function}\verb!;;! & trace calls to function \\
+\verb!#untrace!~\emph{function}\verb!;;! & stop tracing calls to function \\
+\verb!#quit;;! & quit the toplevel \\
+\end{tabular}
+
+\section{System Variables}
+
+\begin{tabular}{ll}
+\verb!OCAMLLIB! & Installation directory \\
+\verb!OCAMLRUNPARAM! & Runtime settings (e.g. \verb!b,s=256k,v=0x015!)\\
+\end{tabular}
+\begin{tabular}{l|llll}
+Flags & \verb!p! & ocamlyacc parser trace & \verb!b! & print backtrace \\
+ & \verb!i! & major heap increment & \verb!s! & minor heap size \\
+ & \verb!O! & compaction overhead  & \verb!o! & space overhead \\
+ & \verb!s! & stack size  & \verb!h! & initial heap size \\
+ & \verb!v! & GC verbosity \\
+\end{tabular}
+
+\section{Files Extensions}
+\begin{tabular}{p{5mm}p{21mm}|p{15mm}p{21mm}}
+\multicolumn{2}{c}{Sources} &\multicolumn{2}{c}{Objects}\\\hline
+.ml & implementation & .cmo & bytecode object \\
+& & .cmx + .o & asm object \\
+.mli & interface & .cmi & interface object \\
+.mly & parser & .cma & bytecode library \\
+.mll & lexer & .cmxa + .a & native library \\
+&& .cmxs & native plugin \\
+\end{tabular}
+
+%\section{Interactive Toplevel}
+%
+%\section{Bytecode Interpreter}
+
+\section{Generating Documentation}
+
+\begin{tabular}{l}
+Generate documentation for source files:\\
+\verb!ocamldoc!~\emph{format}~\verb!-d!~\emph{directory}~\emph{sources.mli}\\
+where \emph{format} is:
+\noindent\begin{tabular}{|p{15mm}p{55mm}}
+\verb!-html!   & 	Generate HTML \\
+\verb!-latex! & 	Generate LaTeX \\
+\verb!-texi! & 	Generate TeXinfo \\
+\verb!-man! & 		Generate man pages \\
+\end{tabular}
+\end{tabular}
+
+\vbox{
+~\\
+{\large\bf Parsing} ~~~~~\verb!ocamlyacc grammar.mly!\\
+will generate \verb!grammar.mli! and \verb!grammar.ml! from the grammar specification.
+
+\noindent\begin{tabular}{p{5mm}p{65mm}}
+\verb!-v! & generates \verb!grammar.output! file with debugging info \\
+\end{tabular}
+
+\begin{tabular}{p{17mm}p{50mm}}
+\vspace{-2cm}
+\begin{verbatim}
+%{
+  header
+%}
+  declarations
+%%
+  rules
+%%
+  trailer
+\end{verbatim}
+&
+\begin{tabular}{p{45mm}}\hline
+\noindent Declarations:\\
+\begin{tabular}{ll}
+\verb!%token!~\emph{token} & \verb!%left!~\emph{symbol}\\
+\verb!%token <!\emph{type}\verb!>!~\emph{token} & \verb!%right!~\emph{symbol}\\
+\verb!%start!~\emph{symbol} & \verb!%nonassoc!~\emph{symbol}\\
+\verb!%type <!\emph{type}\verb!>!~\emph{symbol}\\
+\end{tabular}\\\hline
+Rules:\\
+\begin{tabular}{l}
+nonterminal \verb!:!\\
+    \emph{symbol} ... \emph{symbol} \verb!{! \emph{action} \verb!}!\\
+  \verb!|! ...\\
+  \verb!|! \emph{symbol} ... \emph{symbol} \verb!{! \emph{action} \verb!} ;!\\
+\end{tabular}\\ \hline
+\end{tabular}
+\end{tabular}
+
+{\large\bf Lexing} ~~~~~\verb!ocamllex lexer.mll!\\
+will generate \verb!lexer.ml! from the lexer specification.
+
+\noindent\begin{tabular}{p{5mm}p{65mm}}
+\verb!-v! & generates \verb!lexer.output! file with debugging info \\
+\end{tabular}
+
+\hspace{-1em}\begin{tabular}{p{45mm}p{23mm}}
+\begin{tabular}{l}
+\{ header \}\\
+\verb!let! ident \verb!=! regexp ...\\
+\verb!rule! entrypoint \emph{args} \verb!=!\\
+~~~\verb!parse! regexp \verb!{! \emph{action} \}\\
+~~~~~~\verb!|! ...\\
+~~~~~~\verb!|! regexp \verb!{! \emph{action} \verb!}!\\
+\verb!and! entrypoint \emph{args} \verb!=!\\
+~~~\verb!parse! ...\\
+\verb!and! ...\\
+\verb!{! trailer \}\\
+\end{tabular} &
+\verb!Lexing.lexeme lexbuf! in \emph{action} to get the current
+token.
+\end{tabular}
+
+
+\section{Computing Dependencies}
+
+\verb!ocamldep! can be used to automatically compute dependencies.  It
+takes in arguments all the source files (.ml and .mli), and some
+standard compiler arguments:
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!-pp! \emph{prepro} & call a preprocessor \\
+\verb!-I! \emph{dir}      & search directory for dependencies \\
+\verb!-modules!        & print modules instead of Makefile format \\
+\verb!-slash!           & use $\backslash{}$ instead of / \\
+\end{tabular}
+
+\section{Generic Makefile Rules}
+
+\begin{verbatim}
+.SUFFIXES: .mli .mll .mly .ml .cmo .cmi .cmx
+.ml.cmo :
+        ocamlc -c $(OFLAGS) $(INCLUDES) $<
+.mli.cmi :
+        ocamlc -c $(OFLAGS) $(INCLUDES) $<
+.ml.cmi :
+        ocamlc -c $(OFLAGS) $(INCLUDES) $<
+.ml.cmx :
+        ocamlopt -c $(OFLAGS) $(INCLUDES) $<
+.mll.ml :
+        ocamllex $(OLEXFLAGS) $<
+.mly.ml :
+        ocamlyacc $(OYACCFLAGS) $<
+.mly.mli:
+        ocamlyacc $(OYACCFLAGS) $<
+\end{verbatim}
+}
+
+\end{multicols}
+\end{document}
+
+
+\section{Optional Warnings/Errors}
+For \verb!-w! and \verb!-warn-error!:
+
+\begin{tabular}{lp{7cm}}
+1  & Suspicious-looking start-of-comment mark\\
+2  & Suspicious-looking end-of-comment mark\\
+3  & Deprecated syntax\\
+4  & Matching remains complete even if type is extended\\
+5  & Partially applied function\\
+6  & Label omitted in function application\\
+7  & Methods overridden in defining class\\
+8  & Partial match: missing cases in pattern-matching\\
+9  & Missing fields in a record pattern\\
+10  & Non-unit first expr in sequence (\verb!-strict-sequence!)\\
+11  & Redundant case in a pattern matching.\\
+12  & Redundant sub-pattern in a pattern-matching.\\
+13  & Override of an instance variable.\\
+14  & Illegal backslash escape in a string constant.\\
+15  & Private method made public implicitly.\\
+16  & Unerasable optional argument.\\
+17  & Undeclared virtual method.\\
+18  & Non-principal type.\\
+19  & Type without principality.\\
+20  & Unused function argument.\\
+21  & Non-returning statement.\\
+22  & Camlp4 warning\\
+23  & Useless record \verb!with! clause\\
+24  & Invalid module name\\
+25  & Pattern-matching exhaustiveness cannot be checked\\
+26  & Unused variable not starting with \verb!_! in \verb!let! or \verb!as!\\
+27  & Unused variable not starting with \verb!_! in arguments\\
+28  & Constant variant with a wildcard pattern as argument\\
+29  & Unescaped end-of-line in a string constant\\
+30  & Same constructors defined in mutually recursive types\\
+\end{tabular}
+
+SRCS= x.mly y.mll z.ml
+TMP_SRCS= x.ml x.mli y.ml
+INCLUDES=-I library
+all: byte
+byte: prog.byte
+opt: prog.opt
+prog.byte: $(CMO_OBJS)
+        ocamlc -o prog.byte library/lib.cma $(CMO_OBJS)
+prog.opt: $(CMX_OBJS)
+        ocamlopt -o prog.opt library/lib.cmxa $(CMX_OBJS)
+clean:
+        rm -f *.cm? *~ *.o *.a *.cmx?
+depend: $(TMP_SRCS)
+        ocamldep $(INCLUDES) $(TMP_SRCS) $(SRCS) > .depend
+-include .depend

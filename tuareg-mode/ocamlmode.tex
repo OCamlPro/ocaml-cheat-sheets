@@ -1,0 +1,169 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{OCaml Emacs Mode}} \\
+\end{center}
+
+\section{Short Cuts}
+
+\subsection{Subsection}
+
+\begin{tabular}{p{1cm}p{6cm}}
+\verb!C-c C-e!    & Evaluate the phrase where the cursor is. \\
+\verb!C-c C-r!  & Evaluate the whole selected region. \\
+\verb!C-c C-s! & Show the shell window, with ocaml running. \\
+\verb!C-c `!  & Go to exact error location in the source. \\
+\verb!C-x C-x!  & Switch between mark and cursor \\
+\end{tabular}
+
+\begin{tabular}{p{1cm}p{6cm}}
+\verb!TAB!         & indent current line \\
+\verb!M-C-q!      & indent phrase \\
+\verb!M-C-h!      & mark phrase \\
+\verb!C-c C-a!   & switch between interface and implementation \\
+\verb!C-c C-c!   & compile (usually make) \\
+\verb!C-x `!      & goto next error (also mouse button 2 in the compilation log) \\
+\end{tabular}
+
+\subsection{Use type information}
+You must have compiled your code with the \verb!-annot! option.
+
+\begin{tabular}{p{2cm}p{6cm}}
+  \verb! C-c C-t!    &caml-types-show-type\\
+  \verb! C-c C-f!    &caml-types-show-call\\
+  \verb! C-c C-l!    &caml-types-show-ident\\
+  \verb! C-c mouse-1!    &caml-types-explore\\
+\end{tabular}
+
+\subsection{Compiling}
+\begin{tabular}{p{2cm}p{6cm}}
+\verb! C-c C-c !    &compile\\
+\verb! C-c ` !    &caml-goto-phrase-error\\
+\end{tabular}
+
+\subsection{Inserting Forms}
+\begin{tabular}{p{2cm}p{6cm}}
+  \verb!C-x C-x!  & Switch between mark and cursor in forms \\
+  \verb! C-c b !    &caml-insert-begin-form\\
+  \verb! C-c f !    &caml-insert-for-form\\
+  \verb! C-c i !    &caml-insert-if-form\\
+  \verb! C-c l !    &caml-insert-let-form\\
+  \verb! C-c m !    &caml-insert-match-form\\
+  \verb! C-c t !    &caml-insert-try-form\\
+  \verb! C-c w !    &caml-insert-while-form\\
+\end{tabular}
+
+\subsection{Miscelleneous}
+\begin{tabular}{p{2cm}p{6cm}}
+  \verb! C-c i!    &ocaml-add-path\\
+  \verb! C-c ]!    &ocaml-close-module\\
+  \verb! C-c [!    &ocaml-open-module\\
+  \verb! C-c C-h!    &caml-help\\
+  \verb! C-c \t!    &caml-complete\\
+  \verb! C-c C-a !    &caml-find-alternate-file\\
+  \verb! C-c C-e !    &caml-eval-phrase\\
+  \verb! C-c C-[ !    &caml-backward-to-less-indent\\
+  \verb! C-c C-] !    &caml-forward-to-less-indent\\
+  \verb! C-c C-q !    &caml-indent-phrase\\
+  \verb! C-c C-r !    &caml-eval-region\\
+  \verb! C-c C-s !    &caml-show-subshell\\
+  \verb! M-\ C-h !    &caml-mark-phrase\\
+  \verb! M-\ C-q !    &caml-indent-phrase\\
+  \verb! M-\ C-x !    &caml-eval-phrase\\
+\end{tabular}
+
+
+
+
+\subsection{Interactions with toplevel}
+
+Start the toplevel using M-x run-caml
+
+
+\begin{tabular}{p{1cm}p{6cm}}
+\verb!M-C-x!     & send phrase to inferior caml process \\
+\verb!C-c C-r!  & send region to inferior caml process \\
+\verb!C-c C-s!  & show inferior caml process \\
+\verb!C-c `!     & goto error in expression sent by M-C-x \\
+\end{tabular}
+
+
+\section{Sample \~{}/.emacs file}
+\begin{verbatim}
+(setq auto-mode-alist
+     (cons '("\\.ml[iylp]?$" . caml-mode)
+          auto-mode-alist))
+(autoload 'caml-mode "caml"
+     "Major mode for editing Caml code." t)
+(autoload 'run-caml "inf-caml"
+     "Run an inferior Caml process." t)
+(if window-system (require 'caml-font))
+(add-hook 'caml-mode-hook  '(lambda ()
+   (define-key caml-mode-map "\M-q" 'caml-indent-phrase)))
+\end{verbatim}
+
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+
+Copyright \copyright\ 2011 OCamlPro SAS
+
+http://www.ocamlpro.com/
+
+
+\end{multicols}
+\end{document}
+

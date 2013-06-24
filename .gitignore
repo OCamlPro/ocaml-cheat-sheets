@@ -1,0 +1,11 @@
+*~
+*.aux
+*.log
+ocaml-c-api/ocaml-c-api.pdf
+ocaml-lang/ocaml-lang.pdf
+ocaml-opam/ocaml-opam.pdf
+ocaml-opam/ocaml-tools.pdf
+ocaml-stdlib/ocaml-stdlib.pdf
+ocaml-tools/ocaml-tools.pdf
+tuareg-mode/tuareg-mode.pdf
+ 

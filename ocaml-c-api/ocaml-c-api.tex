@@ -1,0 +1,256 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+        {-1ex plus -.5ex minus -.2ex}%
+        {0.5ex plus .2ex}%x
+        {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+        {-1explus -.5ex minus -.2ex}%
+        {0.5ex plus .2ex}%
+        {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+        {-1ex plus -.5ex minus -.2ex}%
+        {1ex plus .2ex}%
+        {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{3mm}
+
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{OCaml --- C API}}
+\hfill
+\hfill
+\scriptsize
+OCaml v. 3.12.0 ---
+\today{} ---
+Copyright \copyright\ 2011 OCamlPro SAS
+---
+{\bf http://www.ocamlpro.com/}\\
+\hrule~\\
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+\vbox{
+\section{Declaring Primitives}
+
+1 to 5 arguments:\\
+{\tt external} \emph{ocamlfun} {\tt :} \emph{ocamltype} {\tt =} \verb!"!c\_stub\verb!"!
+
+more than 5 arguments:\\
+{\tt external} \emph{ocamlfun} {\tt :} \emph{ocamltype} {\tt =} \verb!"!tupled\_C\_stub\verb!"!  \verb!"!c\_stub\verb!"!
+
+The C\_stub function has as many arguments as the OCaml function, while
+tupled\_C\_stub has the C prototype:\\
+
+{\tt CAMLprim value} tuple\_c\_stub\verb!(value * argv, int argn)!
+
+where \verb!argn! is the number of values stored in \verb!argv!.
+
+\section{Include Files}
+\begin{tabular}{ll}
+{\tt caml/mlvalues.h} & value type, and conversion macros \\
+{\tt caml/alloc.h} & allocation functions \\
+{\tt caml/memory.h} & memory-related functions and macros \\
+{\tt caml/fail.h} & functions for raising exceptions \\
+{\tt caml/callback.h} & callback from C to OCaml \\
+{\tt caml/custom.h} & operations on custom blocks \\
+{\tt caml/intext.h} & de/serialization for custom blocks \\
+\end{tabular}
+
+\section{Linking with C code}
+
+\subsection{Static Linking}
+
+\verb!-custom!
+
+\subsection{Dynamic Linking}
+
+\verb!.so! and \verb!.dll!
+
+\section{Value Representation}
+
+The {\tt value} type is either (1) an unboxed integer, (2) a pointer
+to a block inside the OCaml heap, or (3) a pointer outside the OCaml
+heap (not scanned by GC).
+
+A {\tt value} pointing withing OCaml heap should always point to the
+beginning of an OCaml block.
+
+Integers are encoded as $(n$\verb!<<!$ 1) + 1$, and so limited to 31
+bits on 32 bits arch, 63 bits on 64 bits arch.
+
+Blocks in the heap are arrays of {\tt value}s, preceeded by a header
+{\tt value}. The header {\tt value} contains the number of {\tt
+  value}s in the array, a tag on one character, and 3 bits for
+garbage-collection.
+
+Interesting tag values:\\
+\begin{tabular}{ll}
+0..\verb!No_scan_tag! − 1 & Standard OCaml Blocks. \\
+\verb!Closure_tag! & A closure, i.e. code pointers plus env. \\
+\verb!String_tag! & An OCaml string. \\
+\verb!Double_tag! & An OCaml float. \\
+\verb!Double_array_tag! & An Array of OCaml floats. \\
+\verb!Abstract_tag! & A block that should not be scanned. \\
+\verb!Custom_tag! & A block with custom functions. \\
+\end{tabular}
+
+}
+
+\subsection{Representations}
+
+
+\section{The 6 GC Safety Rules}
+
+\paragraph{Rule 1:}
+A function that has parameters or local variables of type {\tt value}
+must begin with a call to one of the {\tt CAMLparam} macros and return
+with {\tt CAMLreturn}, {\tt CAMLreturn0}, or {\tt CAMLreturnT}.
+
+\paragraph{Rule 2:}
+ Local variables of type value must be declared with one of the {\tt
+   CAMLlocal} macros. Arrays of values are declared with {\tt
+   CAMLlocalN}. These macros must be used at the beginning of the
+ function, not in a nested block.
+
+\paragraph{Rule 3:}
+Assignments to the fields of structured blocks must be done with the
+\verb!Store_field! macro (for normal blocks) or
+\verb!Store_double_field! macro (for arrays and records of
+floating-point numbers). Other assignments must not use
+\verb!Store_field!  nor \verb!Store_double_field!.
+
+\paragraph{Rule 4:}
+Global variables containing values must be registered with the garbage
+collector using the \verb!caml_register_global_root! function.
+
+\paragraph{Rule 5:}
+ After a structured block (a block with tag less than
+ \verb!No_scan_tag!) is allocated with the low-level functions, all
+ fields of this block must be filled with well-formed values before
+ the next allocation operation. If the block has been allocated with
+ \verb!caml_alloc_small!, filling is performed by direct assignment to
+ the fields of the block:
+
+\verb!Field(v, n) = vn ;!
+
+If the block has been allocated with \verb!caml_alloc_shr!, filling is
+performed through the \verb!caml_initialize! function:
+
+\verb!caml_initialize(&Field(v, n), vn );!
+
+\paragraph{Rule 6:}
+Direct assignment to a field of a block, as in
+
+\verb!Field(v, n) = w;!
+
+is safe only if \verb!v! is a block newly allocated by
+\verb!caml_alloc_small!; that is, if no allocation took place between
+the allocation of \verb!v! and the assignment to the field. In all
+other cases, never assign directly.  If the block has just been
+allocated by \verb!caml_alloc_shr!, use
+\verb!caml_initialize! to
+assign a value to a field for the first time:
+
+\verb!caml_initialize(&Field(v, n), w);!
+
+Otherwise, you are updating a field that previously contained a
+well-formed value; then, call the \verb!caml_modify function!:
+
+\verb!caml_modify(&Field(v, n), w);!
+
+\section{The ``noalloc'' flag}
+
+\section{Macros}
+
+\verb!Is_long(v)! is true if value v is an immediate integer, false otherwise\\
+\verb!Is_block(v)! is true if value v is a pointer to a block, and false if it is an immediate integer.\\
+
+\verb!Val_long(l)! C long int to OCaml int.\\
+\verb!Long_val(v)! OCaml int to C long int.\\
+\verb!Val_int(i)! C int to OCaml int.\\
+\verb!Int_val(v)! OCaml int to C int.\\
+\verb!Val_bool(x)! C truth value to OCaml bool.\\
+\verb!Bool_val(v)! OCaml bool to C truth value.\\
+\verb!Val_true!, \verb!Val_false! OCaml true and false.\\
+
+\verb!Wosize_val(v)! returns the size of the block v, in words, excluding the header.\\
+\verb!Tag_val(v)! returns the tag of the block v.\\
+\verb!Field(v, n)! returns the value contained in the nth field of the structured block v. Fields are numbered from 0 to \verb!Wosize_val(v) − 1!.\\
+\verb!Store_field(b, n, v)! stores the value v in the field number n of value b, which must be a structured block.\\
+\verb!caml_string_length(v)! returns the length (number of characters) of the string v. \\
+\verb!String_val(v)! returns a pointer to the first byte of the string
+v, with type char *. This pointer is a valid C string: there is a null
+character after the last character in the string.  However, Caml
+strings can contain embedded null characters, that will confuse the
+usual C functions over strings.\\
+\verb!Double_val(v)! returns the floating-point number contained in
+value v, with type double.\\
+\verb!Double_field(v, n)! returns the nth element of the array of
+floating-point numbers v (a block tagged \verb!Double_array_tag!).\\
+\verb!Store_double_field(v, n, d)! stores the double precision
+floating-point number d in the nth element of the array of
+floating-point numbers v. \\
+
+\subsection{Allocation Functions}
+
+\verb!caml_alloc(n, t)! returns a fresh block of size n with tag t. If t is less than \verb!No_scan_tag!, then
+the fields of the block are initialized with a valid value in order to satisfy the GC constraints.
+
+\verb!caml_alloc_tuple(n)! returns a fresh block of size n words, with tag 0.
+
+\verb!caml_alloc_string(n)! returns a string value of length n
+characters. The string initially contains garbage.
+
+\verb!caml_copy_string(s)! returns a string value containing a copy of
+the null-terminated C string s (a char *).
+
+\verb!caml_copy_double(d)! returns a floating-point value initialized
+with the double d.
+
+
+\section{Functions}
+
+\section{Callbacks from C to OCaml}
+
+\end{multicols}
+\end{document}
+

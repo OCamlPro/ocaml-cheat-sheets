@@ -1,0 +1,704 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{OCaml Standard Library}}
+\hfill
+\hfill
+\scriptsize
+OCaml v. 3.12.0 ---
+\today{} ---
+Copyright \copyright\ 2011 OCamlPro SAS
+---
+{\bf http://www.ocamlpro.com/}\\
+\hrule~\\
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+\section{Standard Modules}
+
+\subsection{Basic Data Types}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!Pervasives!   & All basic functions \\
+\verb!String!   & Functions on Strings     \\
+\verb!Array!   & Functions on Polymorphic Arrays     \\
+\verb!List!   &  Functions on Polymorphic Lists    \\
+\verb!Char!   &  Functions on Characters    \\
+\verb!Int32!   & Functions on 32 bits Integers     \\
+\verb!Int64!   & Functions on 64 bits Integers     \\
+\verb!Nativeint!   & Functions on Native Integers     \\
+\end{tabular}
+
+\subsection{Advanced Data Types}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!Buffer!    & Automatically resizable strings     \\
+\verb!Complex!   & Complex Numbers     \\
+\verb!Digest!    & MD5 Checksums     \\
+\verb!Hashtbl!   & Polymorphic Hash Tables     \\
+\verb!Queue!   & Polymorphic FIFO     \\
+\verb!Stack!   & Polymorphic LIFO     \\
+\verb!Stream!   & Polymorphic Streams     \\
+\verb!Map!   & Dictionaries (functor)     \\
+\verb!Set!   & Sets (functor)    \\
+\end{tabular}
+
+\subsection{System}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!Arg!   & Argument Parsing     \\
+\verb!Filename!   & Functions on Filenames     \\
+\verb!Format!   & Pretty-Printing     \\
+\verb!Genlex!   & Simple OCaml-Like Lexer     \\
+\verb!Marshal!   & Serialization Functions     \\
+\verb!Lexing!   & Functions for \verb!ocamllex!      \\
+\verb!Parsing!   &  Functions for \verb!ocamlyacc!    \\
+\verb!Printexc!   & Generic Exception Printer     \\
+\verb!Random!   & Random Number Generator     \\
+\verb!Printf!   & printf-like Functions     \\
+\verb!Scanf!   & scanf-like Functions     \\
+\verb!Sys!   & OS Low-level Functions     \\
+\end{tabular}
+
+\subsection{Tweaking}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!Lazy!   & Functions on Lazy Values     \\
+\verb!Gc!   &  Garbage Collection Tuning    \\
+\verb!Weak!   & Weak Pointers (GC) \\
+\end{tabular}
+
+\section{Popular Functions per Module}
+
+
+\subsection{module Hashtbl}
+
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let t = Hashtbl.create 117
+Hashtbl.add t key value;
+let value = Hashtbl.find t key
+Hashtbl.iter (fun key value -> ... ) t;
+let cond = Hashtbl.mem t key
+Hashtbl.remove t key;
+Hashtbl.clear t;
+\end{verbatim}
+\end{tabular}
+
+
+\subsection{module List}
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{0.1em}
+\verb!let len = !{\bf List.length}\verb! l!\\
+\verb!!{\bf List.iter}\verb! (fun ele -> ... ) l;! \\
+\verb!let l' = !{\bf List.map}\verb!(fun ele -> ... ) l! \\
+\verb!let l' = !{\bf List.rev}\verb! l1! \\
+\verb!let acc' = !{\bf List.fold\_left}\verb! (fun acc ele -> ...) acc l! \\
+\verb!let acc' = !{\bf List.fold\_right}\verb! (fun ele acc -> ...) l acc! \\
+\verb!if !{\bf List.mem}\verb! ele l then ...!\\
+\verb!if !{\bf List.for\_all}\verb! (fun ele -> ele >= 0) l then ...!\\
+\verb!if !{\bf List.exists}\verb! (fun ele -> ele < 0) l then ...!\\
+\verb!let neg = !{\bf List.find}\verb! (fun x -> x < 0) ints !\\
+\verb!let negs = !{\bf List.find\_all}\verb! (fun x -> x < 0) ints !\\
+\verb!let (negs,pos) = !{\bf List.partition}\verb! (fun x -> x < 0) ints !\\
+\verb!let ele = !{\bf List.nth}\verb! 2 list!\\
+\verb!let head = !{\bf List.hd}\verb! list!\\
+\verb!let tail = !{\bf List.tl}\verb! list!\\
+\verb!let value = !{\bf List.assoc}\verb! key assocs!\\
+\verb!if !{\bf List.mem\_assoc}\verb! key assocs then ...!\\
+\verb!let assocs = !{\bf List.combine}\verb! keys values!\\
+\verb!let (keys, values) = !{\bf List.split}\verb! assocs!\\
+\verb!let l' = !{\bf List.sort}\verb! compare l!\\
+\verb!let l = !{\bf List.append}\verb! l1 l2! \emph{or} \verb!l1 @ l2!\\
+\verb!let list = !{\bf List.concat}\verb! list_of_lists!\\
+\end{tabular}
+
+\subsubsection{Functions using Physical Equality in List}
+
+\verb!memq!, \verb!assq!, \verb!mem_assq!
+
+
+\subsubsection{Non-tail Recursive Functions in List}
+
+\begin{tabular}{p{77mm}}
+ \verb!append!, \verb!concat!, \verb!@!, \verb!map!,
+ \verb!fold_right!, \verb!map2!, \verb!fold_right2!,
+ \verb!remove_assoc!, \verb!remove_assq!, \verb!split!,
+ \verb!combine!,\verb!merge!
+\end{tabular}
+
+\subsection{module String}
+\vspace{-0.3em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let s = String.create len
+let s = String.make len char
+let len = String.length s
+let char = s.[pos]
+s.[pos] <- char;
+let concat = prefix ^ suffix
+let s' = String.sub s pos len'
+let s =	String.concat "," list_of_strings
+let pos = String.index_from s pos char_to_find
+let pos = String.rindex_from s pos char_to_find
+String.blit src src_pos dst dst_pos len;
+let s' = String.copy s
+let s' = String.uppercase s
+let s' = String.lowercase s
+let s' = String.escaped s
+String.iter (fun c -> ...) s;
+if String.contains s char then ...
+\end{verbatim}
+\end{tabular}
+
+
+\subsection{module Array}
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let t = Array.create len v
+let t =	Array.init len (fun pos -> v_at_pos)
+let v = t.(pos)
+t.(pos) <- v;
+let len = Array.length t
+let t' = Array.sub t pos len
+let t = Array.of_list list
+let list = Array.to_list t
+Array.iter (fun v -> ... ) t;
+Array.iteri (fun pos v -> ... ) t;
+let t' = Array.map (fun v -> ... ) t
+let t' = Array.mapi (fun pos v -> ... ) t
+let concat = Array.append prefix suffix
+Array.sort compare t;
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Char}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let ascii_65 = Char.code 'A'
+let char_A = Char.chr 65
+let c' = Char.lowercase c
+let c' = Char.uppercase c
+let s = Char.escaped c
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Buffer}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let b = Buffer.create 10_000
+Printf.bprintf b "Hello %s\n" name
+Buffer.add_string b s;
+Buffer.add_char b '\n';
+let s = Buffer.contents s
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Digest}
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let md5sum = Digest.string str
+let md5sum = Digest.substring str pos len
+let md5sum = Digest.file filename
+let md5sum = Digest.channel ic len
+let hexa = Digest.to_hex md5sum
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Filename}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+if Filename.check_suffix name ".c" then ...
+let file = Filename.chop_suffix name ".c"
+let file = Filename.basename name
+let dir = Filename.dirname name
+let name = Filename.concat dir file
+if Filename.is_relative file then ...
+let file = Filename.temp_file prefix suffix
+let file = Filename.temp_file ~temp_dir:"." pref suf
+\end{verbatim}
+\end{tabular}
+
+
+
+\subsection{module Marshal}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let string = Marshal.to_string v
+               [Marshal.No_sharing; Marshal.Closures]
+let _ = Marshal.to_buffer string at_pos max_len v []
+let (v : of_type) = Marshal.from_string string at_pos
+if String.length s > at_pos + Marshal.header_size then
+   let needed = Marshal.total_size s at_pos in ...
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Random}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+Random.self_init ();
+Random.init int_seed;
+let int_0_99 = Random.int 100
+let coin = Random.bool ()
+let float = Random.float 1_000.
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Printexc}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let s = Printexc.to_string exn
+let s = Printexc.get_backtrace ()
+Printexc.register_printer (function
+     MyExn s -> Some (Printf.sprintf ...)
+   | _ -> None);
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Lazy}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let lazy_v = lazy (f x)
+let f_x = Lazy.force lazy_v
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Gc}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+Gc.compact ();
+Gc.major ();
+Gc.set { Gc.get() with
+   Gc.minor_heap_size = 1_000_000;
+   Gc.max_overhead = 1_000_000; (* no compaction *)
+ };
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Weak}
+
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let t = Weak.create size
+Weak.set t pos (Some v);
+match Weak.get t pos with None -> ...
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Arg}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+let arg_list = [
+  "-do", Arg.Unit (fun () -> ..), ": call with unit"
+; "-n", Arg.Int (fun int -> ..), "<n> : call with int"
+; "-s", Arg.String (fun s -> ..), "<s> : call/w string"
+; "-yes", Arg.Set flag_ref, ": set ref"
+; "-no", Arg.Clear flag_ref, ": clear ref" ]
+let arg_usage = "prog [args] anons: run prog with args"
+Arg.parse arg_list (fun anon -> .. ) arg_usage;
+Arg.usage arg_list arg_usage;
+\end{verbatim}
+\end{tabular}
+
+
+
+\subsection{module Map}
+
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+module Dict = Map.Make(String)
+module Dict = Map.Make(struct
+    type t = String.t let compare = String.compare end)
+let empty = Dict.empty
+let dict = Dict.add "x" value_x empty
+if Dict.mem "x" dict then ...
+let value_x = Dict.find "x" dict
+let new_dict = Dict.remove "x" dict
+Dict.iter (fun key value -> ..) dict;
+let new_dict = Dict.map (fun value_x -> ..) dict
+let nee_dict = Dict.mapi (fun key value -> ..) dict
+let acc = Dict.fold (fun key value acc -> ..) dict acc
+if Dict.equal dict other_dict then ...
+\end{verbatim}
+\end{tabular}
+
+
+
+\subsection{module Set}
+
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+module S = Set.Make(String)
+module S = Set.Make(struct
+    type t = String.t let compare = String.compare end)
+let empty = S.empty
+let set = S.add "x" empty
+if S.mem "x" set then ...
+let new_set = S.remove "x" set
+S.iter (fun key -> ..) dict;
+let union = S.union set1 set2
+let intersection = S.inter set1 set2
+let difference = S.diff set1 set2
+let min = S.min_elt set
+let max = S.max_elt set
+\end{verbatim}
+\end{tabular}
+
+\subsection{module Printf}
+
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+Printf.printf "flush\n%!";
+let s = Printf.sprintf "%s=%d or %x\n" string int hexa
+Printf.fprintf oc "Error: %dL=%dl\n" int64 int32;
+Printf.bprintf buf "%.3f if %b" float boolean;
+\end{verbatim}
+\end{tabular}
+
+
+\subsection{module Format}
+
+%\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline%\vspace{-1.4em}
+Formatters:\\
+\begin{tabular}{lp{4cm}}
+\verb!@[<h> ...@]! & Horizontal box: everything on one line\\
+\verb!@[<v> ...@]! & Vertical box: next line at every break hint\\
+\verb!@[<hv> ...@]! & Switch from horizontal box to vertical box if needed \\
+\verb!@[<b> ...@]! & Indented box\\
+\verb!@[<hov> ...@]! & Fill line after line \\
+\verb!@[<... 5> ... @]! & next line in box indented by 5 \\
+\verb!@ ! & breakable space \\
+\verb!@,! & break hint \\
+\verb!@;! & full break \\
+\verb!@?! & flush \\
+\verb!@\n! & newline \\
+\verb!@<4>%i! & print in on 4 chars\\
+\verb!@.! & close everything and flush \\
+\end{tabular}
+\end{tabular}
+
+
+
+
+\end{multicols}
+\end{document}
+
+
+
+
+\subsection{module Queue}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Stack}
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+2	Stack.push
+2	Stack.clear
+1	Stack.pop
+1	Stack.length
+1	Stack.create
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+\subsection{module Stream}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+
+
+
+
+
+\subsection{module Genlex}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+
+\subsection{module Lexing}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+20	Lexing.lexeme
+13	Lexing.lexeme_char
+3	Lexing.lexeme_start
+3	Lexing.engine
+3	Lexing.dummy_pos
+2	Lexing.sub_lexeme
+2	Lexing.new_engine
+2	Lexing.lexeme_end
+2	Lexing.from_channel
+1	Lexing.sub_lexeme_opt
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Parsing}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+819	Parsing.peek_val
+4	Parsing.yyparse
+2	Parsing.symbol_start_pos
+2	Parsing.symbol_end_pos
+2	Parsing.is_current_lookahead
+1	Parsing.rhs_start_pos
+1	Parsing.rhs_end_pos
+1	Parsing.parse_error
+1	Parsing.clear_parser
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+
+\subsection{module Printf}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+32	Printf.fprintf
+17	Printf.sprintf
+2	Printf.eprintf
+1	Printf.printf
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Scanf}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Sys}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+8	Sys.file_exists
+5	Sys.os_type
+4	Sys.getenv
+2	Sys.command
+1	Sys.remove
+1	Sys.ocaml_version
+1	Sys.getcwd
+1	Sys.executable_name
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+
+\subsection{module Int32}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Int64}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Nativeint}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+\subsection{module Complex}
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+\subsection{module Pervasives}
+
+(in ocaml-lang.pdf ?)
+
+\vspace{-0.4em}
+\begin{tabular}{|p{70mm}}\hline\vspace{-1.4em}
+\begin{verbatim}
+\end{verbatim}
+\end{tabular}
+
+
+
+
+
+\end{multicols}
+\end{document}
+

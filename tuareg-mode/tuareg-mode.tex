@@ -1,0 +1,283 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{OCaml Emacs Mode (Tuareg)}}
+\hfill
+\hfill
+\scriptsize
+\today{} ---
+Copyright \copyright\ 2011 OCamlPro SAS
+---
+http://www.ocamlpro.com/\\
+\hrule~\\
+\raggedright
+\footnotesize
+\vspace{-1em}
+\begin{multicols}{3}
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\subsection{Generic Emacs Bindings}
+
+\begin{tabular}{ll}
+\verb!M-!  & Meta modifier (usually Alt or Esc key)\\
+\verb!C-!  & Control modifier\\
+\verb!S-!  & Shift modifier\\
+\end{tabular}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-x C-c!     & exit Emacs\\
+\verb!C-g!     & abort current command\\
+\verb!M-x command!     & call function \verb!command! \\
+\verb!C-h b!  & describe all key bindings\\
+\end{tabular}
+
+\subsubsection{File Manipulation}
+
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-x C-f!     & open a new file\\
+\verb!C-x C-s!     & save current file\\
+\verb!C-x b!     & switch between opened files\\
+\verb!C-x b TAB! & list opened files and switch\\
+\verb!C-x k!     & close current file \\
+\end{tabular}
+
+
+\subsubsection{Compiling}
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c C-c!     & compile\\
+\verb!C-x `!     & goto next error (also \verb!C-g p!)\\
+\verb!C-g p!     & goto preivous error\\
+\end{tabular}
+
+\subsubsection{Windows}
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-x 5 f! & open file in new frame\\
+\verb!C-x 5 b! & switch to opened file in new frame\\
+\verb!C-x 5 0! & close current frame\\
+\verb!C-x 1!    & unsplit current window (if splitted) \\
+\verb!C-x 2!    & split window horizontally \\
+\verb!C-x 3!    & split window vertically \\
+\verb!C-x o!    & switch focus between splitted windows \\
+\end{tabular}
+
+\subsubsection{Navigation}
+\begin{tabular}{lp{55mm}}
+\verb!C-a!     & go to beginning of line\\
+\verb!C-e!     & go to end of line\\
+\verb!C-Home! & go to beginning of file\\
+\verb!C-End! & go to end of file\\
+\verb!C-Left! & go backward one word\\
+\verb!C-Right! & go forward one word\\
+\verb!C-Up! & go backward one paragraph\\
+\verb!C-Down! & go forward one paragraph\\
+\verb!M-g g! & goto line number\\
+\verb!M-x goto-char! & go to position \\
+\verb!C-l!     & center window on current position\\
+\end{tabular}
+
+
+\subsubsection{Editing}
+\begin{tabular}{lp{55mm}}
+\verb!C-_!     & undo last operation\\
+\verb!C-t!     & permute two letters\\
+\verb!C-k!     & cut end of line\\
+\verb!M-d!     & cut end of word\\
+\verb!C-backspace!     & cut beginning of word\\
+\verb!M-u!     & end of word to uppercase\\
+\verb!M-l!     & end of word to lowercase\\
+\verb!C-d!     & delete current character\\
+\verb!C-!\emph{num}~\emph{letter} & print \emph{num} times \emph{letter}\\
+\end{tabular}
+
+\subsubsection{Search and Replace}
+\begin{tabular}{lp{55mm}}
+\verb!C-s!     & incremental forward search \\
+\verb!C-r!     & incremental backward search \\
+\verb!M-x replace-string! & replace string\\
+\verb!M-x replace-regexp! & replace regexp\\
+\verb!M-%!     & query before replacing string\\
+\verb!C-M-%!     & query before replacing regexp\\
+\end{tabular}
+
+\subsubsection{Selection (copy and paste)}
+\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-Space!     & start selecting text\\
+\verb!M-w!     & copy selection \\
+\verb!C-w!     & cut selection\\
+\verb!C-y!     & paste selection\\
+\verb!M-y!     & circulate between selections (after \verb!C-y!)\\
+\end{tabular}
+
+\subsection{Tuareg Key Bindings}
+
+\subsubsection{Using type information}
+You must have compiled your code with the \verb!-annot! option.
+
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-mouse-2!     & caml-types-explore\\
+\verb!C-c C-t!     & caml-types-show-type\\
+\emph{unbound}          & caml-types-show-ident\\
+\end{tabular}
+
+\subsubsection{Edting}
+
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c C-q!     & tuareg-indent-phrase\\
+\verb!C-c home!     & tuareg-move-inside-module-or-class-opening\\
+\verb!C-M-h!     & tuareg-mark-phrase\\
+\verb!C-M-\!     & indent-region\\
+\verb!C-x n d!     & tuareg-narrow-to-phrase\\
+\end{tabular}
+
+
+\subsubsection{Interaction with the Toplevel}
+
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c C-s!     & tuareg-run-caml\\
+\verb!C-x C-e!     & tuareg-eval-phrase\\
+\verb!C-c C-e!     & tuareg-eval-phrase\\
+\verb!C-M-x!     & tuareg-eval-phrase\\
+\verb!C-c `!     & tuareg-interactive-next-error-source\\
+\verb!C-c C-b!     & tuareg-eval-buffer\\
+\verb!C-c C-r!     & tuareg-eval-region\\
+\verb!C-c C-k!     & tuareg-kill-caml\\
+\end{tabular}
+
+
+\subsubsection{Navigation}
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c C-a!     & tuareg-find-alternate-file (switch between .ml/.mli files)\\
+\verb!C-c C-down!     & tuareg-next-phrase\\
+\verb!C-M-down!     & tuareg-next-phrase\\
+\verb!C-c C-n!     & tuareg-next-phrase\\
+\verb!C-M-n!     & tuareg-next-phrase\\
+\verb!C-M-p!     & tuareg-previous-phrase\\
+\verb!C-c C-up!     & tuareg-previous-phrase\\
+\verb!C-c C-p!     & tuareg-previous-phrase\\
+\verb!C-M-up!     & tuareg-previous-phrase\\
+\end{tabular}
+
+\vbox{
+\subsubsection{Help and Completion}
+
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c h!     & caml-help\\
+\verb!C-c TAB!     & tuareg-complete\\
+\verb!C-c [!     & ocaml-open-module\\
+\verb!C-c ]!     & ocaml-close-module\\
+\verb!C-c i!     & ocaml-add-path\\
+\end{tabular}
+
+\subsubsection{Inserting Constructions}
+
+\noindent\begin{tabular}{p{15mm}p{55mm}}
+\verb!C-c . b!     & tuareg-insert-begin-form\\
+\verb!C-c . c!     & tuareg-insert-class-form\\
+\verb!C-c . f!     & tuareg-insert-for-form\\
+\verb!C-c . i!     & tuareg-insert-if-form\\
+\verb!C-c . l!     & tuareg-insert-let-form\\
+\verb!C-c . m!     & tuareg-insert-match-form\\
+\verb!C-c . t!     & tuareg-insert-try-form\\
+\verb!C-c . w!     & tuareg-insert-while-form\\
+\verb!C-x C-x!  & Switch between mark and cursor \
+\end{tabular}
+}
+
+\vbox{
+\subsection{Emacs Configuration}
+\subsubsection{Sample \~{}/.emacs file}
+\begin{verbatim}
+(setq auto-mode-alist
+   (cons '("\\.ml\\w?" . tuareg-mode)
+    auto-mode-alist))
+(autoload 'tuareg-mode "tuareg"
+   "Major mode for editing Caml code" t)
+(autoload 'camldebug "camldebug"
+   "Run the Caml debugger" t)
+(if (and (boundp 'window-system) window-system)
+    (when (string-match "XEmacs" emacs-version)
+        (if (not (and (boundp 'mule-x-win-initted)
+             mule-x-win-initted))
+            (require 'sym-lock))
+        (require 'font-lock)))
+(add-hook 'tuareg-mode-hook  '(lambda ()
+   (define-key tuareg-mode-map "\M-q"
+                         'tuareg-indent-phrase)
+   (define-key tuareg-mode-map "\C-c \C-i"
+                         'caml-types-show-ident)
+   (define-key tuareg-mode-map [f4] 'goto-line)
+   (define-key tuareg-mode-map [f5] 'compile)
+   (define-key tuareg-mode-map [f6] 'recompile)
+   (define-key tuareg-mode-map [f7] 'next-error)
+   (auto-fill-mode 1)
+   (setq tuareg-sym-lock-keywords nil)   ))
+(setq column-number-mode t)
+(setq mouse-wheel-follow-mouse t)
+(setq standard-indent 2)
+(transient-mark-mode 1)
+(setq visible-bell t)
+(setq show-paren-face 'modeline)
+(setq global-font-lock-mode t)
+(setq global-auto-revert-mode t)
+\end{verbatim}
+}
+
+
+\end{multicols}
+\end{document}
+
