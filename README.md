@@ -11,3 +11,4 @@
 
 * ocaml-c-api : The C foreign interface of OCaml
 * ocaml-opam : The OPAM package manager
+* ocaml-libs : OCaml libraries available
