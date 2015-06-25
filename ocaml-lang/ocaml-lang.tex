@@ -195,6 +195,7 @@ Module type items:\\
 \verb!  |! \emph{pattern} \verb!when! \emph{guard} \verb!->! \emph{action}
 & conditional case \\
 \verb!  | _ ->! \emph{action} & default case\\
+\verb!  | exception! \emph{exn} \verb!->! \emph{action} & try\&match ($\geq$4.02.0) \\
 \end{tabular}
 Patterns:\\
 \begin{tabular}{ll}
