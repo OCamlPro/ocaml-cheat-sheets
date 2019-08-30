@@ -1,0 +1,85 @@
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{epsfig}
+\usepackage{upquote} % Uncurly the quotes
+\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage{fancyvrb} % better verbatim
+\usepackage{mdframed} % nice frames
+\usepackage[nobottomtitles]{titlesec} % better titles
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt}
+
+\newmdenv[bottomline=false,rightline=false]{topleft}
+\newmdenv[topline=false,leftline=false]{bottomright}
+\DefineVerbatimEnvironment{Verbacorner}{Verbatim}{}
+\surroundwithmdframed[bottomline=false,rightline=false]{Verbacorner}
+\fvset{commandchars=@\{\}}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\newcommand{\makeheader}[1]
+{
+\hspace{-2em}
+\begin{tabular}{l}
+\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
+\end{tabular}\vspace{-2mm}
+\hfill
+\hfill
+\Large{\textbf{#1}}
+\hfill
+\hfill
+\scriptsize
+OCaml v.4.08.1 ---
+Revision 2 ---
+Copyright \copyright\ 2019 OCamlPro SAS
+---
+{\bf http://www.ocamlpro.com/}\\
+\hrule~\\
+\raggedright
+\footnotesize
+
+}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+    \prevdepth=\tpd}
+
+\newcommand{\vb}{\usefont{T1}{DejaVuSansMono-TLF}{b}{n}}
+
+\newenvironment{libcomments}{\begin{itemize}[topsep=-10000pt]}{\end{itemize}}
