@@ -124,7 +124,7 @@ garbage-collection.
 
 Interesting tag values:\\
 \begin{tabular}{ll}
-0..\verb!No_scan_tag! − 1 & Standard OCaml Blocks. \\
+0..\verb!No_scan_tag! -- 1 & Standard OCaml Blocks. \\
 \verb!Closure_tag! & A closure, i.e. code pointers plus env. \\
 \verb!String_tag! & An OCaml string. \\
 \verb!Double_tag! & An OCaml float. \\
@@ -214,7 +214,7 @@ well-formed value; then, call the \verb!caml_modify function!:
 
 \verb!Wosize_val(v)! returns the size of the block v, in words, excluding the header.\\
 \verb!Tag_val(v)! returns the tag of the block v.\\
-\verb!Field(v, n)! returns the value contained in the nth field of the structured block v. Fields are numbered from 0 to \verb!Wosize_val(v) − 1!.\\
+\verb!Field(v, n)! returns the value contained in the nth field of the structured block v. Fields are numbered from 0 to \verb!Wosize_val(v) -- 1!.\\
 \verb!Store_field(b, n, v)! stores the value v in the field number n of value b, which must be a structured block.\\
 \verb!caml_string_length(v)! returns the length (number of characters) of the string v. \\
 \verb!String_val(v)! returns a pointer to the first byte of the string
@@ -253,4 +253,3 @@ with the double d.
 
 \end{multicols}
 \end{document}
-
