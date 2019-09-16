@@ -4,14 +4,34 @@
 \usepackage{ifthen}
 \usepackage[landscape]{geometry}
 \usepackage{epsfig}
-\usepackage{upquote} % Uncurly the quotes
 \usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage{upquote} % Uncurly the quotes
 \usepackage{fancyvrb} % better verbatim
+\usepackage{etoolbox} % for backquote fix
 \usepackage{mdframed} % nice frames
 \usepackage[nobottomtitles]{titlesec} % better titles
 \usepackage{enumitem}
 \setlist[itemize]{noitemsep, topsep=0pt}
 
+% backquote dejavu fix
+\makeatletter
+\chardef\straightquote@code=\catcode`'
+\chardef\backquote@code=\catcode``
+\catcode`'=\active \catcode``=\active
+\patchcmd{\@noligs}
+ {\textasciigrave}
+ {\fixedtextasciigrave}
+ {}{}
+\newcommand{\fixedtextasciigrave}{%
+  \makebox[.5em]{\fontencoding{TS1}\fontfamily{fvs}\selectfont\textasciigrave}% Vera Sans
+}
+\catcode\lq\'=\straightquote@code
+\catcode\lq\`=\backquote@code
+\makeatletter
+
+
+
+% fancyvrb and mdframed stuff
 \newmdenv[bottomline=false,rightline=false]{topleft}
 \newmdenv[topline=false,leftline=false]{bottomright}
 \DefineVerbatimEnvironment{Verbacorner}{Verbatim}{}

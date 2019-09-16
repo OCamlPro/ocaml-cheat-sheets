@@ -14,44 +14,44 @@
 
 \subsection{Syntax}
 
-Implementations are in \verb!.ml! files, interfaces are in \verb!.mli!
+Implementations are in \Verb!.ml! files, interfaces are in \Verb!.mli!
 files.\\
- Comments can be nested, between delimiters \verb!(*!...\verb!*)!\\
-Integers: \verb!123!, \verb!1_000!, \verb!0x4533!, \verb!0o773!, \verb!0b1010101!\\
-Chars: \texttt{'a'}, \texttt{'\textbackslash{}255'}, \texttt{'\textbackslash{}xFF'}, \texttt{'\textbackslash{}n'}
+ Comments can be nested, between delimiters \Verb!(*!...\Verb!*)!\\
+Integers: \Verb!123!, \Verb!1_000!, \Verb!0x4533!, \Verb!0o773!, \Verb!0b1010101!\\
+Chars: \Verb!'a'!, \Verb!'\255'!, \Verb!'\xFF'!, \Verb!'\n'!
 \hfill
-Floats: \verb!0.1!, \verb!-1.234e-34!\\
+Floats: \Verb!0.1!, \Verb!-1.234e-34!\\
 \subsection{Data Types}
 
 \begin{tabular}{ll}
-\verb!unit! & void, takes only one value: \verb!()!\\
-\verb!int! & integer of either 31 or 63 bits, like \verb!42! \\
-\verb!int32! & 32 bits Integer, like \verb!42l! \\
-\verb!int64! & 64 bits Integer, like \verb!42L! \\
-\verb!float! & double precision float, like \verb!1.0! \\
-\verb!bool! & boolean, takes two values: \verb!true! or \verb!false!\\
-\verb!char! & simple ASCII characters, like \verb!'A'!\\
-\verb!string! & strings, like \verb!"Hello"! or \verb!{foo|Hello|foo}!\\
-\verb!bytes! & mutable string of chars \\
-\verb!'a list! & lists, like \verb!head :: tail! or \verb![1;2;3]!   \\
-\verb!'a array! & arrays, like \verb![|1;2;3|]! \\
-$t_1$ \verb!*! ... \verb!*! $t_n$& tuples, like \verb!(1, "foo", 'b')!
+\Verb!unit! & void, takes only one value: \Verb!()!\\
+\Verb!int! & integer of either 31 or 63 bits, like \Verb!42! \\
+\Verb!int32! & 32 bits Integer, like \Verb!42l! \\
+\Verb!int64! & 64 bits Integer, like \Verb!42L! \\
+\Verb!float! & double precision float, like \Verb!1.0! \\
+\Verb!bool! & boolean, takes two values: \Verb!true! or \Verb!false!\\
+\Verb!char! & simple ASCII characters, like \Verb!'A'!\\
+\Verb!string! & strings, like \Verb!"Hello"! or \Verb!{foo|Hello|foo}!\\
+\Verb!bytes! & mutable string of chars \\
+\Verb!'a list! & lists, like \Verb!head :: tail! or \Verb![1;2;3]!   \\
+\Verb!'a array! & arrays, like \Verb![|1;2;3|]! \\
+$t_1$ \Verb!*! ... \Verb!*! $t_n$& tuples, like \Verb!(1, "foo", 'b')!
 \end{tabular}
 
 \subsection{Constructed Types}
 
 \begin{tabular}{ll}
-\verb!type record =! & new record type \\
-~~~ \verb!{!~~~~~~~~~~~~ \emph{field1} \verb!: bool;! & immutable field \\
-~~~ \verb!  mutable! \emph{field2} \verb!: int; }! & mutable field \\
+\Verb!type record =! & new record type \\
+~~~ \Verb!@{!~~~~~~~~~~~~ \emph{field1} \Verb!: bool;! & immutable field \\
+~~~ \Verb!  mutable! \emph{field2} \Verb!: int; @}! & mutable field \\
 \end{tabular}
 \begin{tabular}{ll}
-\verb!type enum =! & new variant type \\
-~~~ \verb!| Constant! & Constant constructor \\
-~~~ \verb!| Param of string! & Constructor with arg \\
-~~~ \verb!| Pair of string * int! & Constructor with args \\
-~~~ \verb!| Gadt : int -> enum! & GADT constructor \\
-~~~ \verb!| Inlined of { x : int }! & Inline record \\
+\Verb!type enum =! & new variant type \\
+~~~ \Verb!| Constant! & Constant constructor \\
+~~~ \Verb!| Param of string! & Constructor with arg \\
+~~~ \Verb!| Pair of string * int! & Constructor with args \\
+~~~ \Verb!| Gadt : int -> enum! & GADT constructor \\
+~~~ \Verb!| Inlined of { x : int }! & Inline record \\
 \end{tabular}
 
 \subsection{Constructed Values}
@@ -70,89 +70,89 @@ let c = Inlined @{ x = 3 @}
 \subsection{References, Strings and Arrays}
 
 \begin{tabular}{ll}
-\verb!let x = ref 3! & integer reference (mutable) \\
-\verb!x := 4! & reference assignation \\
+\Verb!let x = ref 3! & integer reference (mutable) \\
+\Verb!x := 4! & reference assignation \\
 \verb&print_int !x;& & reference access \\
-\verb!s.[0]! & string char access \\
-\verb!t.(0)! & array element access \\
-\verb!t.(0) <- x! & array element modification \\
+\Verb!s.[0]! & string char access \\
+\Verb!t.(0)! & array element access \\
+\Verb!t.(0) <- x! & array element modification \\
 \end{tabular}
 
 \subsection{Imports --- Namespaces}
 
 \begin{tabular}{ll}
-\verb!open Unix! & global open \\
-\verb!let open Unix in! \emph{expr} & local open \\
-\verb!Unix.(!\emph{expr}\verb!)! & local open \\
+\Verb!open Unix! & global open \\
+\Verb!let open Unix in! \emph{expr} & local open \\
+\Verb!Unix.(!\emph{expr}\Verb!)! & local open \\
 \end{tabular}
 
 \vbox{
 \subsection{Functions}
 
 \begin{tabular}{ll}
-\verb!let f x =! \emph{expr} & function with one arg \\
-\verb!let rec f x =! \emph{expr} & recursive function \\
-\hfill apply:& \verb!f x! \\
-\verb!let f x y =! \emph{expr} & with two args \\
-\hfill apply:& \verb!f x y! \\
-\verb!let f (x,y) =! \emph{expr} & with a pair as arg\\
-\hfill apply: & \verb!f (x,y)! \\
-\verb!List.iter (fun x ->! \emph{expr}\verb!) l! & anonymous function\\
-\verb!let f= function None ->! \emph{act}& function definition\\
-\verb!            | Some x ->! \emph{act}& \qquad [by cases]\\
-\hfill apply: & \verb!f (Some x)! \\
-\verb!let f ~str ~len =! \emph{expr} & with labeled args \\
-\hfill apply: & \verb!f ~str:s ~len:10! \\
-\hfill apply (for \verb!~str:str!): & \verb!f ~str ~len! \\
-\verb!let f ?len ~str =! \emph{expr} & with optional arg (\verb!option!) \\
-\verb!let f ?(len=0) ~str =! \emph{expr} & optional arg default \\
-\hfill apply (with omitted arg): & \verb!f ~str:s ! \\
-\hfill apply (with commuting): & \verb!f ~str:s ~len:12! \\
-\hfill apply (\verb!len: int option!): & \verb!f ?len ~str:s! \\
-\hfill apply (explicitly omitted): & \verb!f ?len:None ~str:s! \\
-\verb!let f (x : int) =! \emph{expr} & arg has constrainted type \\
-\verb!let f : 'a 'b. 'a*'b -> 'a!& function with constrainted\\
-\verb!      = fun (x,y) -> x! & \hfill polymorphic type\\
+\Verb!let f x =! \emph{expr} & function with one arg \\
+\Verb!let rec f x =! \emph{expr} & recursive function \\
+\hfill apply:& \Verb!f x! \\
+\Verb!let f x y =! \emph{expr} & with two args \\
+\hfill apply:& \Verb!f x y! \\
+\Verb!let f (x,y) =! \emph{expr} & with a pair as arg\\
+\hfill apply: & \Verb!f (x,y)! \\
+\Verb!List.iter (fun x ->! \emph{expr}\Verb!) l! & anonymous function\\
+\Verb!let f= function None ->! \emph{act}& function definition\\
+\Verb!            | Some x ->! \emph{act}& \qquad [by cases]\\
+\hfill apply: & \Verb!f (Some x)! \\
+\Verb!let f ~str ~len =! \emph{expr} & with labeled args \\
+\hfill apply: & \Verb!f ~str:s ~len:10! \\
+\hfill apply (for \Verb!~str:str!): & \Verb!f ~str ~len! \\
+\Verb!let f ?len ~str =! \emph{expr} & with optional arg (\Verb!option!) \\
+\Verb!let f ?(len=0) ~str =! \emph{expr} & optional arg default \\
+\hfill apply (with omitted arg): & \Verb!f ~str:s ! \\
+\hfill apply (with commuting): & \Verb!f ~str:s ~len:12! \\
+\hfill apply (\Verb!len: int option!): & \Verb!f ?len ~str:s! \\
+\hfill apply (explicitly ommited): & \Verb!f ?len:None ~str:s! \\
+\Verb!let f (x : int) =! \emph{expr} & arg has constrainted type \\
+\Verb!let f : 'a 'b. 'a*'b -> 'a!& function with constrainted\\
+\Verb!      = fun (x,y) -> x! & \hfill polymorphic type\\
 \end{tabular}
 
 
 \subsection{Modules}
 
 \begin{tabular}{ll}
-\verb!module M = struct! .. \verb!end! & module definition\\
-\verb!module M: sig! .. \verb!end= struct! .. \verb!end! & module and signature\\
-\verb!module M = Unix! & module renaming \\
-\verb!include M! & include items from \\
-\verb!module type Sg = sig! .. \verb!end! & signature definition\\
-\verb!module type Sg = module type of M! & signature of module\\
-\verb!let module M = struct! .. \verb!end in! ..  & local module \\
-\verb!let m = (module M : Sg)! & to $1^{st}$-class module\\
-\verb!module M = (val m : Sg)! & from $1^{st}$-class module\\
-\verb!module Make(S: Sg) = struct! .. \verb!end! & functor \\
-\verb!module M = Make(M')! & functor application \\
+\Verb!module M = struct! .. \Verb!end! & module definition\\
+\Verb!module M: sig! .. \Verb!end= struct! .. \Verb!end! & module and signature\\
+\Verb!module M = Unix! & module renaming \\
+\Verb!include M! & include items from \\
+\Verb!module type Sg = sig! .. \Verb!end! & signature definition\\
+\Verb!module type Sg = module type of M! & signature of module\\
+\Verb!let module M = struct! .. \Verb!end in! ..  & local module \\
+\Verb!let m = (module M : Sg)! & to $1^{st}$-class module\\
+\Verb!module M = (val m : Sg)! & from $1^{st}$-class module\\
+\Verb!module Make(S: Sg) = struct! .. \Verb!end! & functor \\
+\Verb!module M = Make(M')! & functor application \\
 & \\
 \end{tabular}
 
-Module type items: \verb!val!, \verb!external!, \verb!type!, \verb!exception!, \verb!module!, \verb!open!, \verb!include!, \verb!class!
+Module type items: \Verb!val!, \Verb!external!, \Verb!type!, \Verb!exception!, \Verb!module!, \Verb!open!, \Verb!include!, \Verb!class!
 
 \subsection{Pattern-matching}
 
 \begin{tabular}{ll}
-\verb!match! \emph{expr} \verb!with! \\
-\verb!  |! \emph{pattern} \verb!->! \emph{action}\\
-\verb!  |! \emph{pattern} \verb!when! \emph{guard} \verb!->! \emph{action}
+\Verb!match! \emph{expr} \Verb!with! \\
+\Verb!  |! \emph{pattern} \Verb!->! \emph{action}\\
+\Verb!  |! \emph{pattern} \Verb!when! \emph{guard} \Verb!->! \emph{action}
 & conditional case \\
-\verb!  | _ ->! \emph{action} & default case\\
+\Verb!  | _ ->! \emph{action} & default case\\
 \end{tabular}
 Patterns:\\
 \begin{tabular}{ll}
-\verb!| Pair (x,y) ->! & variant pattern \\
-\verb!| { field = 3; _ } ->! & record pattern \\
-\verb!| head :: tail ->! & list pattern \\
-\verb!| [1;2;x] ->! & list pattern \\
-\verb!| (Some x) as y ->! & with extra binding \\
-\verb!| (1,x) | (x,0) ->! & or-pattern \\
-\verb!| exception! \emph{exn} \verb!->! & try\&match \\
+\Verb!| Pair (x,y) ->! & variant pattern \\
+\Verb!| { field = 3; _ } ->! & record pattern \\
+\Verb!| head :: tail ->! & list pattern \\
+\Verb!| [1;2;x] ->! & list pattern \\
+\Verb!| (Some x) as y ->! & with extra binding \\
+\Verb!| (1,x) | (x,0) ->! & or-pattern \\
+\Verb!| exception! \emph{exn} \Verb!->! & try\&match \\
 \end{tabular}
 }
 
@@ -166,18 +166,18 @@ Do NOT use on closures
 \begin{tabular}{c|c|l}
 Structural  & Physical & \\
 \hline
-\verb!=!  & \verb!==! & Polymorphic Equality \\
-\verb!<>! & \verb&!=& & Polymorphic Inequality \\
+\Verb!=!  & \Verb!==! & Polymorphic Equality \\
+\Verb!<>! & \verb&!=& & Polymorphic Inequality \\
 \end{tabular}
 
-Polymorphic Generic Comparison Function: \verb!compare!
+Polymorphic Generic Comparison Function: \Verb!compare!
 \begin{tabular}{l|c|c|c}
                           & x $<$ y & x $=$ y & x $>$ y \\
 \hline
-\verb!compare x y! &  -1    &   0   &   1 \\
+\Verb!compare x y! &  negative    &   0   &   positive \\
 \end{tabular}
 
-Other Polymorphic Comparisons: \verb!>!, \verb!>=!, \verb!<!, \verb!<=!
+Other Polymorphic Comparisons: \Verb!>!, \Verb!>=!, \Verb!<!, \Verb!<=!
 }
 
 \subsection{Loops}
@@ -191,53 +191,53 @@ for var = max_value downto min_value do ... done;
 \subsection{Exceptions}
 
 \begin{tabular}{p{3.5cm}p{3.5cm}}
-\verb!exception MyExn! & new exception \\
-\verb!exception MyExn of t * t'! & same with arguments\\
-\verb!exception MyFail = Failure! & rename exception with args\\
-\verb!raise MyExn! & raise an exception\\
-\verb!raise (MyExn (!\emph{args}\verb!))! & raise with args\\
-\verb!try! \emph{expr}  & catch \verb!MyExn!\\
-\verb!  with MyExn -> ...! & \hspace{3pt} if raised in \emph{expr} \\
+\Verb!exception MyExn! & new exception \\
+\Verb!exception MyExn of t * t'! & same with arguments\\
+\Verb!exception MyFail = Failure! & rename exception with args\\
+\Verb!raise MyExn! & raise an exception\\
+\Verb!raise (MyExn (!\emph{args}\Verb!))! & raise with args\\
+\Verb!try! \emph{expr}  & catch \Verb!MyExn!\\
+\Verb!  with MyExn -> ...! & \hspace{3pt} if raised in \emph{expr} \\
 \end{tabular}
 
 \subsection{Objects and Classes}
 
 \begin{tabular}{ll}
-\verb!class virtual foo x = !& virtual class with arg \\
-\verb! let y = x+2 in! & init before object creation\\
-\verb! object (self: 'a)! & object with self reference\\
-\verb!  val mutable variable = x! & mutable instance variable \\
-\verb!  method get = variable! & accessor \\
-\verb!  method set z =!\\
-\verb!     variable <- z+y! & mutator\\
-\verb!  method virtual copy : 'a! & virtual method\\
-\verb!  initializer! & init after object creation\\
-\verb!   self#set (self#get+1)!& \\
-\verb! end! &  \\
-\verb!class bar = !&  non-virtual class\\
-\verb! let var = 42 in! & class variable\\
-\verb! fun z -> object! & constructor argument \\
+\Verb!class virtual foo x = !& virtual class with arg \\
+\Verb! let y = x+2 in! & init before object creation\\
+\Verb! object (self: 'a)! & object with self reference\\
+\Verb!  val mutable variable = x! & mutable instance variable \\
+\Verb!  method get = variable! & accessor \\
+\Verb!  method set z =!\\
+\Verb!     variable <- z+y! & mutator\\
+\Verb!  method virtual copy : 'a! & virtual method\\
+\Verb!  initializer! & init after object creation\\
+\Verb!   self#set (self#get+1)!& \\
+\Verb! end! &  \\
+\Verb!class bar = !&  non-virtual class\\
+\Verb! let var = 42 in! & class variable\\
+\Verb! fun z -> object! & constructor argument \\
 \verb& inherit foo z as super& & inheritance and ancestor reference\\
-\verb& method! set y =& & method explicitly overridden\\
-\verb!    super#set (y+4)! & access to ancestor \\
-\verb! method copy = {< x = 5 >}! & copy with change \\
-\verb!end! & \\
-\verb!let obj = new bar 3! & new object \\
-\verb!obj#set 4; obj#get!  & method invocation \\
-\verb!let obj = object! .. \verb!end! & immediate object \
+\verb& method! set y =& & method explicitly overriden\\
+\Verb!    super#set (y+4)! & access to ancestor \\
+\Verb! method copy = {< x = 5 >}! & copy with change \\
+\Verb!end! & \\
+\Verb!let obj = new bar 3! & new object \\
+\Verb!obj#set 4; obj#get!  & method invocation \\
+\Verb!let obj = object! .. \Verb!end! & immediate object \
 \end{tabular}
 
 \subsection{Polymorphic variants}
 
 
 \begin{tabular}{ll}
-\verb!type t = [ `A | `B of int ]! & closed variant \\
-\verb!type u = [ `A | `C of float ]! & \\
-\verb!type v = [ t | u | ]! & union of variants \\
-\verb!let f : [< t ] -> int = function! & argument must be\\
-\verb!  | `A -> 0 | `B n -> n! & \hfill a subtype of \verb!t!\\
-\verb!let f : [> t ] -> int = function! & \verb!t! is a subtype \\
-\verb!  | `A -> 0 | `B n -> n | _ -> 1! & \hfill of the argument \\
+\Verb!type t = [ `A | `B of int ]! & closed variant \\
+\Verb!type u = [ `A | `C of float ]! & \\
+\Verb!type v = [ t | u | ]! & union of variants \\
+\Verb!let f : [< t ] -> int = function! & argument must be\\
+\Verb!  | `A -> 0 | `B n -> n! & \hfill a subtype of \Verb!t!\\
+\Verb!let f : [> t ] -> int = function! & \Verb!t! is a subtype \\
+\Verb!  | `A -> 0 | `B n -> n | _ -> 1! & \hfill of the argument \\
 \end{tabular}
 
 \end{multicols}
