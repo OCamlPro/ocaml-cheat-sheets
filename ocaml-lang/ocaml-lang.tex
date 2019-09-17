@@ -109,7 +109,7 @@ let c = Inlined @{ x = 3 @}
 \hfill apply (with omitted arg): & \verb!f ~str:s ! \\
 \hfill apply (with commuting): & \verb!f ~str:s ~len:12! \\
 \hfill apply (\verb!len: int option!): & \verb!f ?len ~str:s! \\
-\hfill apply (explicitely ommited): & \verb!f ?len:None ~str:s! \\
+\hfill apply (explicitly omitted): & \verb!f ?len:None ~str:s! \\
 \verb!let f (x : int) =! \emph{expr} & arg has constrainted type \\
 \verb!let f : 'a 'b. 'a*'b -> 'a!& function with constrainted\\
 \verb!      = fun (x,y) -> x! & \hfill polymorphic type\\
@@ -218,7 +218,7 @@ for var = max_value downto min_value do ... done;
 \verb! let var = 42 in! & class variable\\
 \verb! fun z -> object! & constructor argument \\
 \verb& inherit foo z as super& & inheritance and ancestor reference\\
-\verb& method! set y =& & method explicitely overriden\\
+\verb& method! set y =& & method explicitly overridden\\
 \verb!    super#set (y+4)! & access to ancestor \\
 \verb! method copy = {< x = 5 >}! & copy with change \\
 \verb!end! & \\
