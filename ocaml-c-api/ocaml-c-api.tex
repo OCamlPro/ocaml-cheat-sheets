@@ -111,13 +111,13 @@ The {\tt value} type is either (1) an unboxed integer, (2) a pointer
 to a block inside the OCaml heap, or (3) a pointer outside the OCaml
 heap (not scanned by GC).
 
-A {\tt value} pointing withing OCaml heap should always point to the
+A {\tt value} pointing within OCaml heap should always point to the
 beginning of an OCaml block.
 
 Integers are encoded as $(n$\verb!<<!$ 1) + 1$, and so limited to 31
 bits on 32 bits arch, 63 bits on 64 bits arch.
 
-Blocks in the heap are arrays of {\tt value}s, preceeded by a header
+Blocks in the heap are arrays of {\tt value}s, preceded by a header
 {\tt value}. The header {\tt value} contains the number of {\tt
   value}s in the array, a tag on one character, and 3 bits for
 garbage-collection.
