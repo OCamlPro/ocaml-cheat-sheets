@@ -51,7 +51,7 @@ $t_1$ \Verb!*! ... \Verb!*! $t_n$& tuples, like \Verb!(1, "foo", 'b')!
 ~~~ \Verb!| Param of string! & Constructor with arg \\
 ~~~ \Verb!| Pair of string * int! & Constructor with args \\
 ~~~ \Verb!| Gadt : int -> enum! & GADT constructor \\
-~~~ \Verb!| Inlined of { x : int }! & Inline record \\
+~~~ \Verb!| Inlined of @{ x : int @}! & Inline record \\
 \end{tabular}
 
 \subsection{Constructed Values}
@@ -220,7 +220,7 @@ for var = max_value downto min_value do ... done;
 \verb& inherit foo z as super& & inheritance and ancestor reference\\
 \verb& method! set y =& & method explicitly overriden\\
 \Verb!    super#set (y+4)! & access to ancestor \\
-\Verb! method copy = {< x = 5 >}! & copy with change \\
+\Verb! method copy = @{< x = 5 >@}! & copy with change \\
 \Verb!end! & \\
 \Verb!let obj = new bar 3! & new object \\
 \Verb!obj#set 4; obj#get!  & method invocation \\
