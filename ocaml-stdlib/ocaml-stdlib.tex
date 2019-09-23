@@ -70,7 +70,7 @@ let list = {@vb{}List.concat} list_of_lists
   \verb!map!, \verb!mapi!, \verb!fold_right!, \verb!map2!, \verb!fold_right2!,
   \verb!remove_assoc!, \verb!remove_assq!, \verb!split!, \verb!combine!,
   \verb!merge!
-\item Raising {\vb{}Not\_found}: \verb!find!, \verb!assoc!.
+\item Raising {\vb{}Not\_found}: \verb!find!, \verb!assoc!, \verb!assq!.
 \item  Raising {\vb{}Failure}: \verb!hd!, \verb!tl!, \verb!nth!.
 \item Raising {\vb{}Invalid\_argument}: \verb!nth!, \verb!nth_opt!, \verb!init!,
   \verb!iter2!, \verb!map2!, \verb!rev_map2!, \verb!fold_left2!,
@@ -131,9 +131,9 @@ let b = {@vb{}Bytes.create} length
 let b' = {@vb{}Bytes.make} length char
 let b' = {@vb{}Bytes.init} length (fun i -> ...)
 let b' = {@vb{}Bytes.copy} b
-let b' = {@vb{}Bytes.extend} left right b
+let b' = {@vb{}Bytes.extend} b left right
 {@vb{}Bytes.blit} src srcoff dst dstoff len;
-let b = {@vb{}Bytes.concat} blist
+let b = {@vb{}Bytes.concat} sep blist
 {@vb{}Bytes.iteri} (fun i c -> ...) b;
 let s = {@vb{}Bytes.unsafe@_to@_string} b
 let b = {@vb{}Bytes.unsafe@_of@_string} s
@@ -144,7 +144,7 @@ let i = {@vb{}Bytes.get@_uint8} b index
 
 \subsection{module Array}
 \begin{Verbacorner}
-let t = {@vb{}Array.create} len v
+let t = {@vb{}Array.make} len v
 let t = {@vb{}Array.init} len (fun pos -> v_at_pos)
 let v = t.(pos)
 t.(pos) <- v;
@@ -160,7 +160,7 @@ let concat = {@vb{}Array.append} prefix suffix
 {@vb{}Array.sort} compare t;
 \end{Verbacorner}
 
-\subsection{module Int, Int32, Int64, Nativeint}
+\subsection{modules Int, Int32, Int64, Nativeint}
 \begin{Verbacorner}
 module I = Int (* / Int32 / Int64 / Nativeint *)
 let x = {@vb{}I.add} {@vb{}I.zero} {@vb{}I.one}
@@ -211,7 +211,7 @@ let empty = {@vb{}S.empty}
 let set = {@vb{}S.add} "x" empty
 if {@vb{}S.mem} "x" set then ...
 let new_set = {@vb{}S.remove} "x" set
-{@vb{}S.iter} (fun key -> ..) dict;
+{@vb{}S.iter} (fun key -> ..) set;
 let union = {@vb{}S.union} set1 set2
 let intersection = {@vb{}S.inter} set1 set2
 let difference = {@vb{}S.diff} set1 set2
@@ -237,7 +237,7 @@ let b = {@vb{}Buffer.create} 10_000
 {@vb{}Buffer.add@_string} b s;
 {@vb{}Buffer.add@_char} b '\n';
 {@vb{}Buffer.add@_utf@_8@_uchar} b uc;
-let s = {@vb{}Buffer.contents} s
+let s = {@vb{}Buffer.contents} b
 \end{Verbacorner}
 
 
@@ -259,7 +259,7 @@ let hexa = {@vb{}Digest.to@_hex} md5sum
 \begin{Verbacorner}
 if {@vb{}Filename.check@_suffix} name ".c" then ...
 let file = {@vb{}Filename.chop@_suffix} name ".c"
-let file_o = {@vb{}Filename.chop@_suffix@_opt} name ".c"
+let file_o = {@vb{}Filename.chop@_suffix@_opt} ~suffix:".c" name
 let file = {@vb{}Filename.basename} name
 let dir = {@vb{}Filename.dirname} name
 let name = {@vb{}Filename.concat} dir file
