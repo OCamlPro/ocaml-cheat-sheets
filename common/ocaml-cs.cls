@@ -251,6 +251,7 @@
     v,
     val,
     version,
+    file
   },
   % plugins
   keywords=[5]{
@@ -343,13 +344,13 @@
 % Option `nbcode`
 \DeclareOption{nbcode}{
   \lstset{
-    keywordstyle=\color{gray05},
-    keywordstyle=[2]\color{gray25},
-    keywordstyle=[3]\color{gray50},
-    keywordstyle=[4]\usefont{T1}{DejaVuSansMono-TLF}{m}{n}\itshape
-    keywordstyle=[5]\color{gray25}
-    commentstyle=\usefont{T1}{DejaVuSansMono-TLF}{m}{n}\color{gray50},
-    stringstyle=\usefont{T1}{DejaVuSansMono-TLF}{m}{n}\itshape\color{gray25},
+    keywordstyle=\color{gray25},
+    keywordstyle=[2]\bfseries\color{gray05},
+    keywordstyle=[3]\bfseries\color{gray25},
+    keywordstyle=[4]\itshape,
+    keywordstyle=[5]\color{gray25},
+    commentstyle=\color{gray50},
+    stringstyle=\itshape\color{gray25},
   }
 }
 

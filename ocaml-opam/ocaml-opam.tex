@@ -101,8 +101,10 @@ list a {\em sufficient} set of dependencies to install \lst!pkg! \\
 \lst!opam list [--rec] --depends-on pkg!   & list packages depending on \lst!pkg! \\
 \lst!opam list --roots!            & exclude automatically-installed dependencies \\
 \lst!opam list --external pkg!     & list external \lst!pkg! dependencies \\
+\lst!opam list --owns-file file!   & find package owning \lst!file! \\
 \lst!opam show pkg [--field=flds]! & show package details \\
 \lst!opam show pkg --raw!          & show package \opam file \\
+\lst!opam show pkg --list-files!   & list all files belonging to \lst!pkg! \\
 \lst!opam var v!                   & print value of opam variable \\
 {\lstset{deletekeywords=[2]{list},morekeywords=[3]{list}}\lst!opam config list [pkg]!}
                                    & list variables [of package \lst!pkg!] \\
@@ -248,13 +250,13 @@ build: ["dune" "build" "-p" name "-j" jobs]
 \lst!available: condition!& pre-requirements \\
 \lst!build-env: [CC = "foo"]!
                           & custom build/install environment \\
-\linecmd{\lst!extra-source "f" \{src: "url" checksum: "sha256=..."\}!}
+\linecmd{\lst!extra-source "fname" \{src: "url" checksum: "sha256=..."\}!}
                           & additional downloads \\
 \linecmd{\lst!post-messages: """message""" \{condition\}!}
                           & print to the user after install \\
 }
 
-When in a repository:
+When in a repository (not in-source):
 \smallskip
 \listvav{
 \lst!url \{! & \\
@@ -268,15 +270,14 @@ When in a repository:
 Variables are strings, booleans or undefined values.
 
 \listvav{
-postfix conditions & \lst![make "foo"] \{condition\}! \\
+postfix conditions & \lst![make "opt" \{condition\}  "foo"] \{condition\}! \\
 dependencies & \lst@("p1" \{>= "0.5" \& != "0.7" \& condition\} | "p2")@ \\
 version ordering & \lst!"1.02"! $=$ \lst!"1.2"! $<$ \lst!"1.12"! $<$ \lst!"2.0\~"! $<$ \lst!"2.0"! \\
-comparisons & \lst!var = "value"!, \lst^var != ""^, \lst!var >= "0.1"! \\
+comparisons & \lst!var = "value"!, \lst^var != ""^, \lst!"0.1" <= var! \\
 interpolation & \lst!"can be \%\{var\}\% or \%\{bool-var?foo:bar\}\%"! \\
 undefined & \lst!(?undef)! is \lst!false!, \lst!(undef | true)! is \lst!true!
 }
 
-\lst[language=opam]!opam var! lists the pre-defined variables\\
 \lst[alsoletter=]!_:var! is \lst[alsoletter=]!pkg:var! for the current package
 
 Some useful variables:
@@ -296,6 +297,9 @@ Some useful variables:
 \lst!build! & (only in depends) don't recompile when changed \\
 \lst!post! & (only in depends) not needed at build time \\
 }
+
+Run \lst[language=opam]!opam var! for more\\
+
 
 \end{multicols}
 \vfill
