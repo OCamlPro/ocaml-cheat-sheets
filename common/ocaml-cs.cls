@@ -54,23 +54,24 @@
 \newcommand{\makeheader}[3]{
   \fancyhead[L]{
     \begin{minipage}{150pt}
-    \vspace{-5pt}
-    \includegraphics[width=24mm]{../licence/by-sa.pdf}
+     \includegraphics[width=24mm]{../licence/by-sa.pdf}
     \end{minipage}
-    \Large{#1}
   }
-  \fancyhead[C]{}
+  \fancyhead[C]{
+   \Large{#1}
+  }
   \fancyhead[R]{
-    {\scriptsize
-      #2 $\cdot$
-      Revision #3 $\cdot$
-      Copyright \copyright\ 2019 OCamlPro $\cdot$
-      {\bf \url{www.ocamlpro.com}}
-    }}
-    \fancyfoot[L]{}
-    \fancyfoot[C]{}
-    \fancyfoot[R]{}
-  }
+   {\scriptsize
+    #2 $\cdot$ Revision #3 \copyright\ 2019 $\quad$
+    \begin{minipage}{30pt}
+     \vspace{-3pt}
+     \includegraphics[width=\textwidth]{\logoOCP} %defined at bottom
+    \end{minipage}
+   }}
+  \fancyfoot[L]{}
+  \fancyfoot[C]{}
+  \fancyfoot[R]{}
+}
 
 % font size -> set to equivalent to footnotesize of 10 pt
 % it affect only the \\normalsize command, all are still relative to default's
@@ -352,6 +353,8 @@
     commentstyle=\color{gray50},
     stringstyle=\itshape\color{gray25},
   }
+
+  \newcommand\logoOCP{../common/fig/ocamlpro_carre_noir.pdf}
 }
 
 % Option `colcode`
@@ -365,6 +368,8 @@
     commentstyle=\color{tenne},
     stringstyle=\itshape\color{gray50},
   }
+
+  \newcommand\logoOCP{../common/fig/ocamlpro_carre_bleu.pdf}
 }
 
 % Execute class options
