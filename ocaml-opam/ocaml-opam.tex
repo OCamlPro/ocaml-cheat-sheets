@@ -1,91 +1,356 @@
-\documentclass[10pt,landscape]{article}
-\usepackage{multicol}
-\usepackage{calc}
-\usepackage{ifthen}
-\usepackage[landscape]{geometry}
-\usepackage{epsfig}
+\documentclass[colcode]{../common/ocaml-cs}
 
-\ifthenelse{\lengthtest { \paperwidth = 11in}}
-	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
-	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
-		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
-		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
-	}
-\pagestyle{empty}
-\makeatletter
-\renewcommand{\section}{\@startsection{section}{1}{0mm}%
-                                {-1ex plus -.5ex minus -.2ex}%
-                                {0.5ex plus .2ex}%x
-                                {\normalfont\large\bfseries}}
-\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
-                                {-1explus -.5ex minus -.2ex}%
-                                {0.5ex plus .2ex}%
-                                {\normalfont\normalsize\bfseries}}
-\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
-                                {-1ex plus -.5ex minus -.2ex}%
-                                {1ex plus .2ex}%
-                                {\normalfont\small\bfseries}}
-\makeatother
+\lstset{language=opam}
 
-% Define BibTeX command
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\makeheader{The \textbf{opam} package manager for OCaml (command-line)}{opam 2.0}{1}
+% warning: this is repeated for p.2
 
-% Don't print section numbers
-\setcounter{secnumdepth}{0}
-
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0pt plus 0.5ex}
-
-
-% -----------------------------------------------------------------------
-
+\renewcommand{\arraystretch}{1.1}
 \begin{document}
-\hspace{-2em}
-\begin{tabular}{l}
-\vspace{0cm}\epsfig{file=../licence/by-sa,width=24mm}\\
-\end{tabular}\vspace{-2mm}
-\hfill
-\hfill
-\Large{\textbf{OPAM OCaml Package Manager}}
-\hfill
-\hfill
-\scriptsize
-OCaml v. 3.12.0 ---
-\today{} ---
-Copyright \copyright\ 2011 OCamlPro SAS
----
-{\bf http://www.ocamlpro.com/}\\
-\hrule~\\
-\raggedright
-\footnotesize
+
+
 \begin{multicols}{3}
 
-% multicol parameters
-% These lengths are set only within the two main columns
-%\setlength{\columnseprule}{0.25pt}
-\setlength{\premulticols}{1pt}
-\setlength{\postmulticols}{1pt}
-\setlength{\multicolsep}{1pt}
-\setlength{\columnsep}{2pt}
+\lst!opam command --help! \hfill show the manpage for \lst!command! \hfill \null
+
+Non-ambiguous prefixes are accepted \\
+(\emph{e.g.} {\lstset{morekeywords=[2]{inst}}\lst!opam inst . --deps!} for
+\lst!opam install . --deps-only!).
 
 \section{Installation}
+Download from: \hfill \url{https://opam.ocaml.org} \hfill \null
 
-Download from: http://opam.ocamlpro.com/
+\listvav{
+{\lst!opam init!} &
+     {set up \opam, default repository, switch, scripts} \\
+\lst!opam init --bare! &
+     {create \lst[language=neutral]!\~/.opam! without a compiler switch} \\
+\lst!opam init --reinit -i! &
+     {reinstall opam scripts (\emph{e.g.} after upgrade)} \\
+}
 
-Initialization:
-\begin{verbatim}
-opam init
-\end{verbatim}
+Run \lst[language=neutral]!eval $(opam env)! when changing switch or prompted, or accept the shell hook setup. %$
 
-Before \emph{any} use in your shell:
-\begin{verbatim}
-eval `opam config env`
-\end{verbatim}
+\section{Configuration}
+\listvav{
+\lst!opam config report! & display a summary of the set-up \\
+\lst!opam command -v[v]!    & print commands being run \\
+\lst!opam config set v val! & set switch variable \lst!v! \\
+\lst!opam config set-global v val! & set global config variable \lst!v! \\
+\lst!opam command --root root! & run opam using \lst!root! as opam root \\
+\lst!opam command --switch sw! & run opam on given \lst!sw! \\
+\lst!opam clean! & remove archive cache and artefacts \\
+}
 
-\section{Adding repositories}
+\section{Switches}
+\listvav{
+\splt{\lst!opam switch create [name] compiler!}
+     {install a new prefix (``switch'') with the given \lst!compiler! and select
+      it. \lst!compiler! should be one of \lst!ocaml-base-compiler[.version]!,
+      \lst!ocaml-system[.version]!, \lst!ocaml-variants[.version]!, or \lst!--empty!.} \\
+\lst!opam switch!                 & list installed switches \\
+\lst!opam switch sw!              & select the switch \lst!sw! \\
+\lst!opam switch create dir [compiler]! & install packages defined in \lst!dir! in a new local switch \\
+\lst!opam switch list-available!  & list all available compilers \\
+\splt{\lst!opam exec [--switch sw] -- command args!}
+     {run \lst!command args! in the correct environment} \\
+}
+
+The ``current switch'' is defined by the \lst!OPAMSWITCH! environment variable,
+the \lst!PWD! (for local switches), and the latest selected one.
+
+\section{Allowed URL formats}
+\listvav{
+\lst!http:// https:// ftp://! &
+  remote archives \\
+\lst!ssh:// file://! & archives or directories \\
+\lst!path!                & file paths (version control is detected) \\
+\lst!user@host:path!      & ssh addresses (using {\em rsync})\\
+\lst!git:// hg:// darcs://! & version control \\
+\linecmd{\lst!git+ssh:// hg+https:// git+file://!}
+  & version control with specific transport \\
+\linecmd{\lst!git+https://foo.com/git/bar\#branch!}
+  & specific tag, branch, commit, etc. \\
+}
+
+\section{Packages}
+\listvav{
+\splt{\lst!opam install pkgs!}
+     {\lst!pkgs! are package names, \lst!pkg.version!, constraints \lst!"pkg>=version"!} \\
+\lst!opam install --show! & only print a list of actions \\
+\lst!opam install --dry-run! & simulate everything \\
+\linecmd{\lst!opam install pkgs --best-effort!} & don't fail on impossible requests \\
+\lst!opam update [--all]! & update repositories and package sources \\
+\lst!opam upgrade [pkgs]! & bring installed packages to latest version\\
+\lst!opam remove pkgs!    & uninstall packages \\
+\lst!opam remove --auto!  & uninstall no longer needed dependencies \\
+\lst!opam reinstall pkgs! & recompile and reinstall packages \\
+\lst!opam source pkg [--dev]! & download package source \\
+% }
+% \listvav{
+\linecmd{\lst!opam reinstall --list-pending!} & show pending recompilations \\
+\linecmd{\lst!opam reinstall --forget-pending!} & at your own risk \\
+}
+
+\section{Exploring}
+\listvav{
+\lst!opam list!                    & list installed packages \\
+\lst!opam list --resolve pkg! &
+list a {\em sufficient} set of dependencies to install \lst!pkg! \\
+\lst!opam list [--rec] --required-by pkg!  & list dependencies of \lst!pkg! \\
+\lst!opam list [--rec] --depends-on pkg!   & list packages depending on \lst!pkg! \\
+\lst!opam list --roots!            & exclude automatically-installed dependencies \\
+\lst!opam list --external pkg!     & list external \lst!pkg! dependencies \\
+\lst!opam list --owns-file file!   & find package owning \lst!file! \\
+\lst!opam show pkg [--field=flds]! & show package details \\
+\lst!opam show pkg --raw!          & show package \opam file \\
+\lst!opam show pkg --list-files!   & list all files belonging to \lst!pkg! \\
+\lst!opam var v!                   & print value of opam variable \\
+{\lstset{deletekeywords=[2]{list},morekeywords=[3]{list}}\lst!opam config list [pkg]!}
+                                   & list variables [of package \lst!pkg!] \\
+}
+
+\section{Package pinning}
+\listvav{
+% \splt
+{\lst!opam install dir!} &
+     {pin and install packages from the sources and definitions at \lst!dir!} \\
+\lst!opam pin pkg version!    & pin \lst!pkg! to given version \\
+\lst!opam pin pkg[.version] url! & pin \lst!pkg!$^1$ to \lst!url! (can be a dir) and install \\
+\lst!opam pin url!            & pin using package definitions at \lst!url! \\
+\lst!opam pin --dev pkg!      & pin known package to its source repo \\
+\lst!opam pin [--short]!      & list pinned packages \\
+{\lstset{deletekeywords=[2]{remove},morekeywords=[3]{remove}}\lst!opam pin remove pkgs|dir!}
+                              & unpin packages \\
+\lst!opam pin edit pkg!       & tweak package definition \\
+}
+
+\lst!pin! commands also install/remove unless \lst!-n! is specified.
+
+$^1$If not using \lst!pkg.version!, version is defined by opam
+file, directory name, or latest known version.
+
+\section{Project development}
+\subsection{Working with local pins}
+\listvav{
+\splt{\lst!opam install pkg|dir --deps-only!}
+     {just install all the pre-requisites} \\
+\splt{\lst!opam install pkg|dir --working-dir!}
+     {bypass VCS, take all uncommitted changes} \\
+\splt{\lst!opam install pkg|dir --inplace-build!}
+     {process build and install directly in the source} \\
+\splt{\lst!opam install pkg|dir --assume-built!}
+     {directly run install commands from the source} \\
+\splt{\lst!opam lint pkg|dir|opamfile!}
+     {check the style of a package definition} \\
+}
+
+\subsection{Sharing a dev setup}
+\listvav{
+\splt{\lst!opam lock pkg --direct-only!}
+     {generate an \lst[language=neutral]!opam.locked! file with version-strict dependencies} \\
+\splt{\lst!opam lock pkg!}
+     {generate an \lst[language=neutral]!opam.locked! file with a fixed dependency tree} \\
+\splt{\lst!opam install dir|pkg --locked!}
+     {install, reproducing the same state as described by the \lst!locked! file} \\
+\splt{\lst!opam switch export|import file|-!}
+     {switch state (compiler, installed packages, pins\ldots) save/restore}
+}
+
+\section{Configuring remotes}
+\listvav{
+\splt{\lst!opam repository [--all]!}
+     {list defined repositories (current switch, or all)} \\
+\splt{\lst!opam switch create --repos default,custom=url ...!}
+     {create a switch with repositories \lst!default!, and newly defined \lst!custom!} \\
+\splt{\lst!opam repository add name url --dont-select!}
+     {define repository \lst!name! at \lst!url!} \\
+\splt{\lst!opam repository add name [url]!}
+     {use \lst!name! in the current switch} \\
+\splt{\lst!opam repository add name [url] --set-default!}
+     {use \lst!name! for newly created switches} \\
+\splt{\lst!opam repository add name [url] --all-switches!}
+     {use \lst!name! for all existing switches} \\
+\splt{\lst!opam repository add name [url] --rank=-1!}
+     {use \lst!name! with lowest priority} \\
+\splt{\lst!opam repository set-url name url!}
+     {change repository url} \\
+\splt{\lst!opam repository set-repos foo,bar!}
+     {redefine the repos selections for the current switch} \\
+}
+
+The definition for \lst!pkg.version! is taken from the highest ranking
+repository.
+
+%% \section{Upgrading opam}
+%% From binary: run script at
+%% {\scriptsize\url{https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh}}
+
+%% \ppar
+%% From source: \\
+%% \lst[language=shell]!  opam install opam-devel! \\
+%% \lst[language=shell]!  sudo cp $(opam var opam-devel:lib)/opam $(which opam)!\\
+
+
+\pagebreak
+
+\makeheader{The \textbf{opam} package manager for OCaml (packaging and tools)}{opam 2.0}{1}
+
+
+\section{Package definition files}
+\lstset{language=opam-file}
+
+Full specification:
+\hfill\url{http://opam.ocaml.org/doc/Manual.html#opam}\hfill\null
+
+\listvav{
+In source:&\lst!opam!, or \lst!pkg.opam!, or \lst!opam/pkg.opam! \\
+In a package repository:&
+ {\lstset{deletekeywords=[5]version,morekeywords=[4]version}\lst!packages/pkg/pkg.version/opam!} \\
+}
+
+\begin{lstlisting}
+opam-version: "2.0"
+name: "project"
+version: "0.1"
+synopsis: "One-line description"
+description: """
+Longer description
+"""
+maintainer: "Name <email>"
+authors: ["Name <email>"]
+license: "SPDX license"  # see https://spdx.org/licenses/
+homepage: "https://project.org"
+bug-reports: "https://gitfoo.net/project/issues"
+dev-repo: "git+https://gitfoo.net/project.git"
+depends: ["ocaml"
+          "ocamlfind" {<= "1.8"}
+          "odoc" {with-doc & >= "1.0"}]
+# with a regular ./configure - make
+build: [["./configure" "--prefix=%{prefix}%"]
+        [make]]
+install: [make "install"]
+# with dune (no 'install:' needed)
+depends: ["dune" {>= "1.10"}] # add to your other 'depends:'
+build: ["dune" "build" "-p" name "-j" jobs]
+\end{lstlisting}
+
+\columnbreak
+\section{Some optional fields}
+\listvav{
+\lst!tags: ["org:foo" "examples"]! & for package sorting \\
+\lst!depopts: [deps]!     & optional dependencies \\
+\lst!substs: ["foo"]!     & expand file \lst!"foo"! from \lst!"foo.in"! \\
+\linecmd{\lst!patches: ["f.patch" \{os = "macos"\}]!}
+                          & conditional patches \\
+\lst!run-test: [cmds]!    & only when running with \lst!--with-test! \\
+\linecmd{\lst!pin-depends: [["pkg.version" "url"]]!}
+  & when pinned, pin also these \\
+\lst!conflicts: [deps]!   & anti-dependencies \\
+\lst!available: condition!& pre-requirements \\
+\lst!build-env: [CC = "foo"]!
+                          & custom build/install environment \\
+\linecmd{\lst!extra-source "fname" \{src: "url" checksum: "sha256=..."\}!}
+                          & additional downloads \\
+\linecmd{\lst!post-messages: """message""" \{condition\}!}
+                          & print to the user after install \\
+}
+
+When in a repository (not in-source):
+\smallskip
+\listvav{
+\lst!url \{! & \\
+\lst!\ \ src: "url"! & archive URL (or VCS, in custom repos) \\
+\lst!\ \ checksum: "sha512=XXX"! & supported: md5, sha256, sha512 \\
+\lst!\}! & \\
+}
+
+\columnbreak
+\section{Expressions}
+Variables are strings, booleans or undefined values.
+
+\listvav{
+postfix conditions & \lst![make "opt" \{condition\}  "foo"] \{condition\}! \\
+dependencies & \lst@("p1" \{>= "0.5" \& != "0.7" \& condition\} | "p2")@ \\
+version ordering & \lst!"1.02"! $=$ \lst!"1.2"! $<$ \lst!"1.12"! $<$ \lst!"2.0\~"! $<$ \lst!"2.0"! \\
+comparisons & \lst!var = "value"!, \lst^var != ""^, \lst!"0.1" <= var! \\
+interpolation & \lst!"can be \%\{var\}\% or \%\{bool-var?foo:bar\}\%"! \\
+undefined & \lst!(?undef)! is \lst!false!, \lst!(undef | true)! is \lst!true!
+}
+
+\lst[alsoletter=]!_:var! is \lst[alsoletter=]!pkg:var! for the current package
+
+Some useful variables:
+\smallskip
+\listvav{
+\multicolumn{2}{l}{\textbf{Strings}} \\
+\lst!name!, \lst!version! & current package name, version \\
+& allowed \emph{e.g.} as \lst!depends: ["foo" \{= version\}]! \\
+\lst!lib! & this is \lst[language=neutral]!"\%\{prefix\}\%/lib"! \\
+\lst[alsoletter=]!pkg:lib! & this is \lst[language=neutral]!"\%\{prefix\}\%/pkg/lib"! \\
+\linecmd{\lst!arch!, \lst!os!, \lst!os-distribution!, \lst!os-family!, \lst!os-version!}
+        & system detection \\
+\multicolumn{2}{l}{\textbf{Booleans}} \\
+\lst[alsoletter=]!pkg:dev! & \lst!pkg! was not built from a release archive \\
+\lst!with-test! & tests have been enabled (package-specific) \\
+\lst!with-doc! & documentation has been enabled (package-specific) \\
+\lst!build! & (only in depends) don't recompile when changed \\
+\lst!post! & (only in depends) not needed at build time \\
+}
+
+Run \lst[language=opam]!opam var! for more\\
+
 
 \end{multicols}
-\end{document}
+\vfill
+\begin{multicols}{3}
+\section{External dependencies}
+\listvav{
+\lst!name: "conf-gtk3"! & by convention, use a "conf-" prefix \\
+\linecmd{\lst!depexts: ["libgtk-3-dev"] \{os-family = "debian"\}!}
+                     & define system package dependencies \\
+\lst!flags: conf!
+          & package without install, for polling the system \\
+}
 
+Related commands:
+\smallskip
+\listvav{
+\lst[language=opam]!opam list -e --resolve pkg!
+   & print requirements of \lst[language=opam]!pkg! on this system \\
+\lst[language=opam]!opam depext pkg!
+  & handles requirements of \lst[language=opam]!pkg! (plugin) \\
+}
+
+\section{Publishing}
+Through Github pull-requests to the official repository at \\
+\dent\url{https://github.com/ocaml/opam-repository}
+
+Automatically, using the \lst!opam-publish! plugin:
+\smallskip
+\listvav{
+\lst[language=opam]!opam publish url!
+    & publish from hosted source archive (plugin) \\
+\lst[language=opam]!opam publish [dir]! & publish latest tag from detected Github origin \\
+}
+
+\section{Repository administration}
+\lstset{language=opam}
+To be run from the root of an opam repository:
+
+{\lstset{keywords=[2]{admin},morekeywords=[3]{list,cache,lint}}
+\listvav{
+\lst!opam admin list!  & list packages \\
+\lst!opam admin cache! & download all archives to cache \\
+\lst!opam admin index! & generate an index (needed for HTTP) \\
+\lst!opam admin lint!  & lint all packages \\
+\lst!opam admin filter patterns! & only keep matching packages \\
+\splt{\lst!opam admin add-constraint "pkg<=3"!}
+     {add a version constraint to all dependencies towards \lst!pkg!}
+}
+}
+%\pagebreak
+
+\end{multicols}
+\vfill
+\end{document}
