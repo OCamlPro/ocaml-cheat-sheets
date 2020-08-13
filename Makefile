@@ -7,6 +7,13 @@ all:
 	$(MAKE) -C ocaml-c-api
 	$(MAKE) -C ocaml-opam
 
+DIRS= ocaml-lang ocaml-tools ocaml-stdlib ocaml-libs tuareg-mode	\
+  ocaml-c-api ocaml-opam
+
+pages:
+	for dir in $(DIRS); do cp -f $$dir/$$dir.pdf docs/; done
+	cp -f ocaml-opam/ocaml-opam-bw.pdf docs/
+
 clean:
 	$(MAKE) clean -C ocaml-lang
 	$(MAKE) clean -C ocaml-tools
